@@ -7,7 +7,7 @@ volatile uint8_t value = 0;
 int	main()
 {
 
-	DDRB |= (1 << PB0) | (1 << PB1) | (1 << PB2) | (1 << PB4); // set PB (port B, pin 0,1,2,4) to out
+	DDRB |= (1 << PB0) | (1 << PB1) | (1 << PB2) | (1 << PB4); // set PB (port B, pin 0,1,2,4) to out (1)
 	DDRD &= ~((1 << PD2) | (1 << PD4)); // set PD2 and PD3 to in (0)
 	PORTD |= (1 << PD2) | (1 << PD4); // set PD2 and PD3 pull-up res to high (1)
 
