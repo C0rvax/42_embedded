@@ -19,7 +19,7 @@ void	uart_init(unsigned int ubbr)
 	UCSR0C = (1 << UCSZ01) | (1 << UCSZ00); // Mode 8N1 (8bits, no parity, 1 stop bit)
 }
 
-int	main()
+int	main(void)
 {
 	uart_init(MYUBBR);
 	while (1)
