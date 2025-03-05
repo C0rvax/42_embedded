@@ -1,5 +1,11 @@
 #include <avr/io.h>
 
+// TCCRx Timer/Counter Control Register
+// WGM Waveform Generator Mode
+// CS Clock Select
+// OCRx Output Compare Register
+// TCNTx Timer/Counter
+// COMx Compare Output Mode
 int	main()
 {
 	DDRB |= (1 << PB1); // set PB1 to out (1)
@@ -14,12 +20,7 @@ int	main()
 	return 0;
 }
 /*
-	TIMSK1 |= (1 << OCIE1A); // activate interrupt for OCR1A (TIMSK1 -> timer interrupt mask register) (page 97 and 112)
-	asm ("SEI"); // activate global interrupt (page 283)
-	sei(); // activate global interrupt
-
-ISR(TIMER1_COMPA_vect) // (interrupt Service Routine) interrupt routine for the interrupt vector Timer1 Compare Match A
-{
-	PINB |= (1 << PB1); // reverse PB1 only for pin set in out mode
-}
+	TCCR1B |= (1 << WGM13);
+	TCCR1A |= (1 << WGM10); // mode 9 PWM phase and freq correct
+	TCCR1A |= (1 << COM1A1); // clear at TOP / set at BOTTOM
 */
