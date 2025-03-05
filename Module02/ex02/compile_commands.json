@@ -1,0 +1,20 @@
+[
+ {
+  "directory": "/home/aduvilla/Code/embeded/Module02/ex02",
+  "arguments": [
+   "avr-gcc",
+   "-mmcu=atmega328p",
+   "-DF_CPU=16000000UL",
+   "-Os",
+   "-Wall",
+   "-Wextra",
+   "-pedantic",
+   "-I.",
+   "-g",
+   "-o",
+   "main.bin",
+   "main.c"
+  ],
+  "file": "main.c"
+ }
+]
