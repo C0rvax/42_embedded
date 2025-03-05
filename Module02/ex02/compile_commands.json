@@ -1,6 +1,6 @@
 [
  {
-  "directory": "/home/aduvilla/Code/embeded/Module02/ex02",
+  "directory": "/home/c0rvax/Code/embeded/Module02/ex02",
   "arguments": [
    "avr-gcc",
    "-mmcu=atmega328p",
