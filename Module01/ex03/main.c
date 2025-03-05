@@ -39,7 +39,7 @@ int	main()
 	return 0;
 }
 
-ISR(INT0_vect) // vector (p.49)
+ISR(INT0_vect) // (Interupt Service Routine) vector (p.49)
 {
 	if (tCycle <= MAXCYCLE)
 		tCycle += STEP;
