@@ -9,6 +9,7 @@
    "-Wall",
    "-Wextra",
    "-pedantic",
+   "-I.",
    "-g",
    "-o",
    "main.bin",
