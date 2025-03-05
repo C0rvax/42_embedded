@@ -9,8 +9,8 @@
 
 #define MAX_LEN 16
 
-const char correct_username[] = "c0rvax";
-const char correct_password[] = "nope";
+const char* correct_username = "c0rvax";
+const char* correct_password = "nope";
 
 void uart_init(void)
 {
