@@ -1,5 +1,6 @@
 #include <avr/io.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
 
 // TCCRx Timer/Counter Control Register
 // WGM Waveform Generator Mode
