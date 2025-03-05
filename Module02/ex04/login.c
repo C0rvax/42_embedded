@@ -1,17 +1,20 @@
 #include "login.h"
+#include <avr/io.h>
 
 void	acceptUser(void)
 {
+	DDRB |= (1 << PB0) | (1 << PB1) | (1 << PB2) | (1 << PB4);
 	uart_tx_string(WELCOME);
 	for (unsigned char i = 0; i < 25; i++) // 25 is 5 cycles
 	{
 		if (i % 5 != 3)
 		{
 			PORTB ^= (1 << i % 5);
-			_delay_ms(200);
+			_delay_ms(100);
 			PORTB ^= (1 << i % 5);
 		}
 	}
+	DDRB = 0;
 }
 
 void	drama(void)

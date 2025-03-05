@@ -8,13 +8,16 @@
    "-Os",
    "-Wall",
    "-Wextra",
+   "-Werror",
    "-pedantic",
-   "-I.",
+   "-Iinclude/",
    "-g",
    "-o",
    "main.bin",
-   "main.c"
+   "main.c",
+   "prog.c",
+   "login.c"
   ],
-  "file": "main.c"
+  "file": "login.c"
  }
 ]
