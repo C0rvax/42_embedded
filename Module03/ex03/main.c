@@ -88,7 +88,7 @@ int	main(void)
 			uart_send_string("\b \b");
         if (c == '\n' || c == '\r') // EOF
 		{
-			uart_send_string("\r\n");
+			uart_send_string("\r\n\t");
             buffer[index] = '\0';
             parse_rgb(buffer);
             index = 0;
