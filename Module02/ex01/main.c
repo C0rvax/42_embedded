@@ -33,10 +33,11 @@ void	uart_init(unsigned char ubrr)
 
 void	timer1_init(void)
 {
-	TCCR1B |= (1 << WGM12) | (1 << CS12) | (1 << CS10);
-	OCR1A = ((F_CPU / 1024) * 2) - 1;
-	TIMSK1 |= (1 << OCIE1A); // activate interrupt (TIMer MaSk)
-	sei();
+	TCCR1B |= (1 << WGM12) | (1 << CS12) | (1 << CS10); // mode 4 (CTC) with 1024 prescaler
+	OCR1A = ((F_CPU / 1024) * 2) - 1; // TOP = freq / prescaler * 2seconds - 1 (start at 0)
+	TCNT1 = 0;
+	TIMSK1 |= (1 << OCIE1A); // activate interrupt (TIMer MaSk) (p.112)
+	sei(); // enable global interrupts
 }
 
 ISR(TIMER1_COMPA_vect)
@@ -47,7 +48,6 @@ ISR(TIMER1_COMPA_vect)
 int	main(void)
 {
 	uart_init(MYUBRR);
-//	_delay_ms(100);
 	timer1_init();
 
 	while (1);

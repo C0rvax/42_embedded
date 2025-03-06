@@ -1,0 +1,22 @@
+2. 8N1 : Configuration du format des trames
+
+L’UART transmet les données sous forme de trames (séries de bits organisées d’une certaine manière).
+Le format 8N1 signifie :
+
+    8 : Nombre de bits de données
+    → Chaque caractère envoyé contient 8 bits de données.
+    → Cela permet de transmettre un caractère ASCII standard (qui tient sur 7 bits) ou un octet entier (8 bits).
+
+    N : Pas de bit de parité ("No Parity")
+    → Il n’y a pas de bit de parité pour détecter les erreurs de transmission.
+    → La transmission est donc plus rapide, mais il n’y a pas de détection d'erreurs intégrée.
+
+    1 : Nombre de bits de stop
+    → Chaque trame se termine par 1 bit de stop.
+    → Ce bit permet au récepteur de se resynchroniser avant de recevoir la trame suivante.
+
+3. Comment l’UART envoie une trame avec 115200 8N1 ?
+
+Lorsqu’un caractère est transmis via l’UART avec cette configuration, voici à quoi ressemble la trame envoyée sur la ligne série :
+Start	Data (8 bits)	Parity	Stop
+1 bit	8 bits		0 bit	1 bit
