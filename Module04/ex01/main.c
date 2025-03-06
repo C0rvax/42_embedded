@@ -15,10 +15,10 @@ void	init_setup(void)
 
 ISR(INT0_vect)
 {
-//	EIMSK &= ~(1 << INT0); // disable interruption / useless -> within an interruption no interruptions
+	EIMSK &= ~(1 << INT0); // disable interruption
 	_delay_ms(50);
 	PORTB ^= (1 << PB0);
-//	EIMSK |= (1 << INT0); // enable interruption
+	EIMSK |= (1 << INT0); // enable interruption
 }
 
 int	main(void)
