@@ -5,7 +5,7 @@
 
 # define F_CPU 16000000UL
 # define UART_BAUDRATE 115200
-# define UBRR_VALUE (unsigned char)((F_CPU / (16.0 * UART_BAUDRATE)) - 0.5)
+# define UBRR_VALUE (uint16_t)((F_CPU / (16.0 * UART_BAUDRATE)) - 0.5)
 # define MAX_LEN 16
 
 void uart_init(void);

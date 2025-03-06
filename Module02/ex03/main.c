@@ -24,10 +24,10 @@ char toUpCase(char c)
 	return c;
 }
 
-void	uart_init(unsigned char ubrr)
+void	uart_init(uint16_t ubrr)
 {	
-	UBRR0L = (unsigned char)ubrr; // (p.162)
-	UBRR0H = (unsigned char)(ubrr >> 8); // configure Baud rate (p.162)
+	UBRR0L = (uint8_t)(ubrr & 0xFF); // (p.162)
+	UBRR0H = (uint8_t)(ubrr >> 8); // configure Baud rate (p.162)
 	
 	UCSR0B = (1 << TXEN0) | (1 << RXEN0) | (1 << RXCIE0); // activate TX (transmission) and RX (reception) and interrupt on reception
 	UCSR0C |= (1 << UCSZ01) | (1 << UCSZ00); // Mode 8N1 (8bits, no parity, 1 stop bit) (p.162)
