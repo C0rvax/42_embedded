@@ -29,6 +29,14 @@ int	main(void)
 		_delay_ms(1000);
 		set_color(0, 0, 1);
 		_delay_ms(1000);
+		set_color(1, 1, 0);
+		_delay_ms(1000);
+		set_color(0, 1, 1);
+		_delay_ms(1000);
+		set_color(1, 0, 1);
+		_delay_ms(1000);
+		set_color(1, 1, 1);
+		_delay_ms(1000);
 	}
 	return 0;
 }
