@@ -4,6 +4,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define RED PD5
+#define GREEN PD6
+#define BLUE PD3
+#define OCRED OCR0B
+#define OCGREEN OCR0A
+#define OCBLUE OCR2B
+
 #define F_CPU 16000000UL
 #define UART_BAUDRATE 115200
 #define MYUBRR F_CPU/16.0/UART_BAUDRATE-0.5
@@ -36,14 +43,14 @@ void	uart_send_string(char *str)
 
 void	set_rgb(uint8_t r, uint8_t g, uint8_t b)
 {
-    OCR0B = r; // Sortie rouge
-    OCR0A = g; // Sortie verte
-    OCR2B = b; // Sortie bleue
+    OCRED = r; // Sortie rouge
+    OCGREEN = g; // Sortie verte
+    OCBLUE = b; // Sortie bleue
 }
 
 void	init_rgb(void)
 {
-	DDRD |= (1 << PD6) | (1 << PD5) | (1 << PD3);  // PD3 (OC2B - blue), PD5 (OC0B - red), PD6 (OC0A - green)
+	DDRD |= (1 << RED) | (1 << GREEN) | (1 << BLUE);  // PD3 (OC2B - blue), PD5 (OC0B - red), PD6 (OC0A - green)
 
     // Config timers in mode Fast PWM
     TCCR0A = (1 << COM0A1) | (1 << COM0B1) | (1 << WGM00) | (1 << WGM01);
@@ -53,7 +60,7 @@ void	init_rgb(void)
     TCCR2B = (1 << CS21);  // Prescaler 8
 }
 
-void	parse_rgb(char *str)
+void	parse_rgb(char* str)
 {
     if (str[0] == '#' && strlen(str) == 7) // Check format #RRGGBB
 	{
@@ -77,7 +84,8 @@ int	main(void)
     char buffer[8] = {0};
     uint8_t index = 0;
 
-    uart_send_string("UART Ready\n");
+    uart_send_string("UART Ready\r\n");
+    uart_send_string("\tUsage #RRGGBB\r\n\t");
 
     while (1)
 	{
