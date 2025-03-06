@@ -36,14 +36,14 @@ void	uart_send_string(char *str)
 
 void	set_rgb(uint8_t r, uint8_t g, uint8_t b)
 {
-    OCR0A = r; // Sortie rouge
-    OCR0B = g; // Sortie verte
-    OCR2A = b; // Sortie bleue
+    OCR0B = r; // Sortie rouge
+    OCR0A = g; // Sortie verte
+    OCR2B = b; // Sortie bleue
 }
 
 void	init_rgb(void)
 {
-	DDRD |= (1 << PD6) | (1 << PD5) | (1 << PD3);  // PD3 (OC2B - blue), PD6 (OC0A - red), PD5 (OC0B - green)
+	DDRD |= (1 << PD6) | (1 << PD5) | (1 << PD3);  // PD3 (OC2B - blue), PD5 (OC0B - red), PD6 (OC0A - green)
 
     // Config timers in mode Fast PWM
     TCCR0A = (1 << COM0A1) | (1 << COM0B1) | (1 << WGM00) | (1 << WGM01);
