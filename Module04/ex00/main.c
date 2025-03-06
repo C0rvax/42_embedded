@@ -1,100 +1,28 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
-#include <stdlib.h>
-#include <string.h>
 
-#define F_CPU 16000000UL
-#define UART_BAUDRATE 115200
-#define MYUBRR F_CPU/16.0/UART_BAUDRATE-0.5
-
-void	init_uart(unsigned int ubrr)
+void	init_setup(void)
 {
-    UBRR0H = (unsigned char)(ubrr >> 8);
-    UBRR0L = (unsigned char)ubrr;
-    UCSR0B = (1 << RXEN0) | (1 << TXEN0);  // Enable reception and transmission
-    UCSR0C = (1 << UCSZ01) | (1 << UCSZ00); // 8 bits of data, 1 stop bit
+	DDRB |= (1 << PB0); // D1 LED out (1)
+	DDRD &= ~(1 << PD2); // D1 LED in (0)
+	PORTD |= (1 << PD2); // pull-up resistor
+	
+	EICRA |= (1 << ISC01); // falling edge on sw1
+	EIMSK |= (1 << INT0);
+	sei();
 }
 
-char	uart_rx(void)
+ISR(INT0_vect)
 {
-    while (!(UCSR0A & (1 << RXC0))); // wait for reception
-    return UDR0;
-}
-
-void	uart_tx(char data)
-{
-    while (!(UCSR0A & (1 << UDRE0))); // wait for an empty buffer
-    UDR0 = data;
-}
-
-void	uart_send_string(char *str)
-{
-    while (*str)
-        uart_tx(*str++);
-}
-
-void	set_rgb(uint8_t r, uint8_t g, uint8_t b)
-{
-    OCR0A = r; // Sortie rouge
-    OCR0B = g; // Sortie verte
-    OCR2A = b; // Sortie bleue
-}
-
-void	init_rgb(void)
-{
-	DDRD |= (1 << PD6) | (1 << PD5) | (1 << PD3);  // PD3 (OC2B - blue), PD6 (OC0A - red), PD5 (OC0B - green)
-
-    // Config timers in mode Fast PWM
-    TCCR0A = (1 << COM0A1) | (1 << COM0B1) | (1 << WGM00) | (1 << WGM01);
-    TCCR0B = (1 << CS01);  // Prescaler 8
-
-    TCCR2A = (1 << COM2B1) | (1 << WGM20) | (1 << WGM21);
-    TCCR2B = (1 << CS21);  // Prescaler 8
-}
-
-void	parse_rgb(char *str)
-{
-    if (str[0] == '#' && strlen(str) == 7) // Check format #RRGGBB
-	{
-        char rs[3] = {str[1], str[2], '\0'};
-        char gs[3] = {str[3], str[4], '\0'};
-        char bs[3] = {str[5], str[6], '\0'};
-
-        uint8_t r = strtol(rs, NULL, 16);
-        uint8_t g = strtol(gs, NULL, 16);
-        uint8_t b = strtol(bs, NULL, 16);
-
-        set_rgb(r, g, b);
-    }
+	EIMSK &= ~(1 << INT0); // disable interruption
+	_delay_ms(50);
+	PORTB ^= (1 << PB0);
+	EIMSK |= (1 << INT0); // enable interruption
 }
 
 int	main(void)
 {
-    init_uart(MYUBRR);
-    init_rgb();
-
-    char buffer[8] = {0};
-    uint8_t index = 0;
-
-    uart_send_string("UART Ready\n");
-
-    while (1)
-	{
-        char c = uart_rx();
-
-		uart_tx(c);
-        if (c == '\b' || c == 127)
-			uart_send_string("\b \b");
-        if (c == '\n' || c == '\r') // EOF
-		{
-			uart_send_string("\r\n");
-            buffer[index] = '\0';
-            parse_rgb(buffer);
-            index = 0;
-        }
-		else if (index < 7)
-            buffer[index++] = c;
-    }
+	init_setup();
+	while (1);
 }
-
