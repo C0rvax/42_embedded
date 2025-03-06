@@ -16,7 +16,7 @@
 
 volatile uint16_t tCycle = MINCYCLE;
 
-int	main()
+int	main(void)
 {
 	DDRB |= (1 << PB1); // set PB1 to out (1)
 	DDRD &= ~((1 << PD2) | (1 << PD4)); // set PD2 and PD4 to in (1)
@@ -31,9 +31,11 @@ int	main()
 	ICR1 = MINCYCLE + MAXCYCLE; // set TOP = 1s (15625 * 1024 = 16 Hz)
 	OCR1A = tCycle;
 
-	EICRA |= (1 << ISC01) | (1 << ISC11); // falling edge generates interupt for INT0 and INT1 (page 54)
-	EIMSK |= (1 << INT0) | (1 << INT1); // enable INT0 and INT1 (p.55)
-
+	EICRA |= (1 << ISC01); // falling edge generates interupt for INT0 and INT1 (page 54)
+	EIMSK |= (1 << INT0); // enable INT0 (p.55)
+ 
+	PCICR |= (1 << PCIE2); // activate PCINT[23:16] (PD4)
+	PCMSK2 |= (1 << PCINT20); // enable change with PD4
 	sei(); // set the I-bit of Status Register (SREG) at 1 (p.11 and 16) -> Global Interupt Enable
 	while (1);
 	return 0;
@@ -41,13 +43,15 @@ int	main()
 
 ISR(INT0_vect) // (Interupt Service Routine) vector (p.49)
 {
+	_delay_ms(40);
 	if (tCycle <= MAXCYCLE)
 		tCycle += STEP;
 	OCR1A = tCycle;
 }
 
-ISR(INT1_vect)
+ISR(PCINT2_vect)
 {
+	_delay_ms(40);
 	if (tCycle >= MINCYCLE)
 		tCycle -= STEP;
 	OCR1A = tCycle;

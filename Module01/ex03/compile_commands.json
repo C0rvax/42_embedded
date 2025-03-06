@@ -1,0 +1,18 @@
+[
+ {
+  "directory": "/home/c0rvax/Code/embeded/Module01/ex03",
+  "arguments": [
+   "avr-gcc",
+   "-mmcu=atmega328p",
+   "-DF_CPU=16000000UL",
+   "-Wall",
+   "-Wextra",
+   "-pedantic",
+   "-g",
+   "-o",
+   "main.bin",
+   "main.c"
+  ],
+  "file": "main.c"
+ }
+]
