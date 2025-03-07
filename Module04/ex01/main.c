@@ -1,28 +1,42 @@
 #include <avr/io.h>
-#include <util/delay.h>
 #include <avr/interrupt.h>
+#include <stdint.h>
+#define TMAX 62500
 
-void	init_setup(void)
+volatile uint16_t cycle = 0;
+volatile int8_t step = 5;
+
+void	init_timers(void)
 {
-	DDRB |= (1 << PB0); // D1 LED out (1)
-	DDRD &= ~(1 << PD2); // D1 LED in (0)
-	PORTD |= (1 << PD2); // pull-up resistor
-	
-	EICRA |= (1 << ISC01); // falling edge on sw1
-	EIMSK |= (1 << INT0);
+	// ** Config Timer0
+	TCCR0A = 0; // Normal Mode
+	TCCR0B |= (1 << CS00); // Prescaler 1
+	TIMSK0 |= (1 << TOIE0); // overflow interrupt every 1 (Prescaler) * 256 (TOP 0xFF) ticks (62500 in a sec)
+
+
+	DDRB |= (1 << PB1);
+
 	sei();
 }
 
-ISR(INT0_vect)
+ISR(TIMER0_OVF_vect)
 {
-	EIMSK &= ~(1 << INT0); // disable interruption
-	_delay_ms(50);
-	PORTB ^= (1 << PB0);
-	EIMSK |= (1 << INT0); // enable interruption
+	// ** Config Timer1
+	TCCR1A |= (1 << COM1A1) | (1 << WGM11); // Fast PWM TOP ICR1
+	TCCR1B |= (1 << WGM12) | (1 << WGM13)| (1 << CS10); // Prescaler 1
+	ICR1 = TMAX;
+	OCR1A = cycle;
+
+//	TCNT1 = 0;
+	cycle += step;
+	if (cycle == TMAX || cycle == 0)
+		step = -step; // reverse
+
+	OCR1A = cycle;
 }
 
 int	main(void)
 {
-	init_setup();
+	init_timers();
 	while (1);
 }
