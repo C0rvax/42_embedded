@@ -1,8 +1,6 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
-#include <stdlib.h>
-#include <string.h>
 
 #define RED PD5
 #define GREEN PD6
@@ -43,9 +41,9 @@ void	uart_send_string(char *str)
 
 void	set_rgb(uint8_t r, uint8_t g, uint8_t b)
 {
-    OCRED = r; // Sortie rouge
-    OCGREEN = g; // Sortie verte
-    OCBLUE = b; // Sortie bleue
+    OCRED = r;
+    OCGREEN = g;
+    OCBLUE = b;
 }
 
 void	init_rgb(void)
@@ -60,18 +58,58 @@ void	init_rgb(void)
     TCCR2B = (1 << CS21);  // Prescaler 8
 }
 
+void putnbr2(uint8_t n)
+{
+    if (n >= 10)
+        putnbr2(n / 10);
+    uart_tx((n % 10) + '0');
+}
+
+uint8_t ft_strlen(const char* str)
+{
+	uint8_t len = 0;
+	while (str[len])
+		len++;
+	return len;
+}
+
+uint8_t my_strtol16(const char* str)
+{
+    uint8_t result = 0;
+
+    while (*str)
+	{
+        uint8_t digit;
+
+        if (*str >= '0' && *str <= '9')
+            digit = *str - '0';
+        else if (*str >= 'a' && *str <= 'f')
+            digit = *str - 'a' + 10;
+        else if (*str >= 'A' && *str <= 'F')
+            digit = *str - 'A' + 10;
+        else
+            break;
+
+        if (result > (255 - digit) / 16)
+            return 255;
+
+        result = result * 16 + digit;
+        str++;
+    }
+    return result;
+}
+
 void	parse_rgb(char* str)
 {
-    if (str[0] == '#' && strlen(str) == 7) // Check format #RRGGBB
+    if (str[0] == '#' && ft_strlen(str) == 7) // Check format #RRGGBB
 	{
         char rs[3] = {str[1], str[2], '\0'};
         char gs[3] = {str[3], str[4], '\0'};
         char bs[3] = {str[5], str[6], '\0'};
 
-        uint8_t r = strtol(rs, NULL, 16);
-        uint8_t g = strtol(gs, NULL, 16);
-        uint8_t b = strtol(bs, NULL, 16);
-
+		uint8_t r = my_strtol16(rs);
+		uint8_t g = my_strtol16(gs);
+		uint8_t b = my_strtol16(bs);
         set_rgb(r, g, b);
     }
 }
@@ -91,18 +129,22 @@ int	main(void)
 	{
         char c = uart_rx();
 
-		uart_tx(c);
-        if (c == '\b' || c == 127)
+		if (c != 127 && c != '\b')
+			uart_tx(c);
+        if ((c == '\b' || c == 127) && index > 0)
+        {
 			uart_send_string("\b \b");
-        if (c == '\n' || c == '\r') // EOF
+			index--;
+		}
+		else if (c == '\n' || c == '\r') // EOF
 		{
 			uart_send_string("\r\n\t");
             buffer[index] = '\0';
             parse_rgb(buffer);
             index = 0;
         }
-		else if (index < 7)
-            buffer[index++] = c;
+		else if (index < 7 && c != '\b' && c != 127)
+			buffer[index++] = c;
     }
 }
 
