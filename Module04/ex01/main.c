@@ -1,7 +1,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdint.h>
-#define TMAX 80
+#define TMAX 61
 
 volatile uint16_t cycle = 0;
 volatile int8_t step = 1;
