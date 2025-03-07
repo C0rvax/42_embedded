@@ -9,7 +9,7 @@ void	init_setup(void)
 	PORTD |= (1 << PD2); // pull-up resistor
 	
 	EICRA |= (1 << ISC01); // falling edge on sw1
-	EIMSK |= (1 << INT0);
+	EIMSK |= (1 << INT0); // activate INT0
 	sei();
 }
 

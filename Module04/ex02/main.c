@@ -22,6 +22,11 @@ int main(void)
     EICRA |= (1 << ISC01); // INT0 (PD2)
     EIMSK |= (1 << INT0); // Activate INT0
 
+	/* Configure PCINT18 on falling edge
+	PCICR |= (1 << PCIE1);
+	PCMSK1 |= (1 << PCINT18); don't work cause PCINT18 is on PCIE2 too (not PCIE1 the code is not good)
+	*/
+
     // Configure PCINT2 on falling edge
 	PCICR |= (1 << PCIE2); // PCINT2 (PD4)
 	PCMSK2 |= (1 << PCINT20); // Activate PCINT2
