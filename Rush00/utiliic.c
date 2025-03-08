@@ -42,7 +42,7 @@ void	init_slave(void)
 
 void master_t(uint8_t data)
 {
-    TWDR = (SLAVE_ADDRESS << 1) | 0x0; // load SLAVE_ADDRESS + W (0) into data register
+    TWDR = (SLAVE_ADDRESS << 1) | 0x00; // load SLAVE_ADDRESS + W (0) into data register
     TWCR = (1 << TWEN) | (1 << TWINT); // Clear TWINT to start transmission of address
     while (!(TWCR & (1 << TWINT))); // Wait for TWINT flag set (SLA+W has been transmited)
 	if (!(TWSR & 0x18))
@@ -52,6 +52,20 @@ void master_t(uint8_t data)
     while (!(TWCR & (1 << TWINT))); // Wait for TWINT flag set (data has been transmited)
 	if (!(TWSR & 0x28))
 		ERROR();
+}
+
+uint8_t master_r(void)
+{
+    TWDR = (SLAVE_ADDRESS << 1) | 0x01; // load SLAVE_ADDRESS + R (1) into data register
+    TWCR = (1 << TWEN) | (1 << TWINT); // Clear TWINT to start transmission of address
+    while (!(TWCR & (1 << TWINT))); // Wait for TWINT flag set (SLA+W has been transmited)
+	if (!(TWSR & 0x40))
+		ERROR();
+    TWCR = (1 << TWEN) | (1 << TWINT); // Clear TWINT to start transmission of address
+    while (!(TWCR & (1 << TWINT))); // Wait for TWINT flag set (SLA+W has been transmited)
+	if ((TWSR & 0x50))
+		return TWDR;
+	return 0;
 }
 
 uint8_t slave_r(uint8_t address)
