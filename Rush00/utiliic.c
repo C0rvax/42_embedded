@@ -1,104 +1,73 @@
 #include <avr/io.h>
-#define F_CPU 16000000UL  // Fréquence de l'ATmega328P (16 MHz)
-#define F_SCL 100000UL    // Fréquence I2C (100 kHz)
-#define TWBR_VALUE ((F_CPU / F_SCL - 16) / 2)  // Calcul du registre TWBR
-#define SLAVE_ADDRESS 0x10  // Adresse du Slave
+#include <stdint.h>
 
-void I2C_Master_Init() {
-    TWBR = (uint8_t)TWBR_VALUE;  // Définit la vitesse du bus
-    TWSR = 0x00;  // Pas de prescaler
+/*
+* TWI Two Wire service Interface
+* TWBR TW Baud Rate
+* TWSR TW Status Register
+* TWCR TW Control Register
+* TWEN TW ENable
+* TWSTA TW STArt
+* TWSTO TW STOp
+* TWINT TW INTerrupt flag
+* TWDR TW Data Register
+* TWAR TW Address Register
+* Write (low) 0
+* Read (high) 1
+*/
+#define F_CPU 16000000UL  // Freq mcu
+#define F_SCL 100000UL    // Freq I2C (100 kHz)
+#define TWBR_VALUE ((F_CPU / F_SCL - 16) / 2)  // (p.180)
+#define SLAVE_ADDRESS 0x08  // ??? Rdm 
+
+void	init_master(void)
+{
+    TWBR = (uint8_t)TWBR_VALUE;  // Bus Speed (p.198)
+    TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);  // (p.183) (1 << TWIE) enable interrupt
+    while (!(TWCR & (1 << TWINT)));  // Wait for TWINT flag set (p.183)
+	if (!(TWSR & 0x08)) // Check if Status different from start (p.183)
+		ERROR();
 }
 
-void I2C_Start() {
-    TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT);  // Envoi du Start
-    while (!(TWCR & (1 << TWINT)));  // Attente de la fin de transmission
-}
-
-void I2C_Slave_Init(uint8_t address) {
-    TWAR = address << 1;
-    TWCR = (1 << TWEA) | (1 << TWEN) | (1 << TWINT);
-}
-
-void I2C_Stop() {
+void	stop_master(void)
+{
     TWCR = (1 << TWSTO) | (1 << TWEN) | (1 << TWINT);
 }
 
-void I2C_Write(uint8_t data) {
-    TWDR = data;
-    TWCR = (1 << TWEN) | (1 << TWINT);
+void	init_slave(void)
+{
+    TWAR = address << 1; // (p.191)
+    TWCR = (1 << TWEA) | (1 << TWEN);
+}
+
+void master_t(uint8_t data)
+{
+    TWDR = (SLAVE_ADDRESS << 1) | 0x0; // load SLAVE_ADDRESS + W (0) into data register
+    TWCR = (1 << TWEN) | (1 << TWINT); // Clear TWINT to start transmission of address
+    while (!(TWCR & (1 << TWINT))); // Wait for TWINT flag set (SLA+W has been transmited)
+	if (!(TWSR & 0x18))
+		ERROR();
+    TWDR = data; // load data into data register
+    TWCR = (1 << TWEN) | (1 << TWINT); // Clear TWINT to start transmission of address
+    while (!(TWCR & (1 << TWINT))); // Wait for TWINT flag set (data has been transmited)
+	if (!(TWSR & 0x28))
+		ERROR();
+}
+
+uint8_t slave_r(uint8_t address)
+{
     while (!(TWCR & (1 << TWINT)));
-}
-uint8_t I2C_Slave_Receive() {
+	if (!(TWSR & 0x60))
+		ERROR();
     while (!(TWCR & (1 << TWINT)));
-    return TWDR;
+	if ((TWSR & 0x80))
+		return TWDR;
+	return 0;
 }
 
-
-int main() {
-    I2C_Master_Init();  // Init Master
-    I2C_Slave_Init(SLAVE_ADDRESS);  // Init Slave
-
-    while (1) {
-        I2C_Start();
-        I2C_Write(SLAVE_ADDRESS << 1);  // Envoi de l'adresse du Slave
-        I2C_Write(0x42);  // Envoi d'une donnée (exemple)
-        I2C_Stop();
-    }
-    return 0;
-}
-int main() {
-    I2C_Slave_Init(SLAVE_ADDRESS);
-
-    while (1) {
-        uint8_t data = I2C_Slave_Receive();  // Attend une donnée
-        if (data == 0x42) {
-            // Action en réponse au Master
-        }
-    }
-    return 0;
-}
------------------------------------
------------------------------------------
-
-// Déclaration des fonctions
-uint8_t I2C_TryMaster();
-
-// Détection du rôle
-uint8_t isMaster = 0; // 1 = Master, 0 = Slave
-
-int main() {
-    // Vérification si on peut être Master
-    if (I2C_TryMaster()) {
-        isMaster = 1;
-        I2C_Master_Init();
-    } else {
-        isMaster = 0;
-        I2C_Slave_Init(SLAVE_ADDRESS);
-    }
-
-    while (1) {
-        if (isMaster) {
-            // Code du Master
-            I2C_Start();
-            I2C_Write(SLAVE_ADDRESS << 1);
-            I2C_Write(0x42); // Envoi d'une donnée exemple
-            I2C_Stop();
-            _delay_ms(1000);
-        } else {
-            // Code du Slave
-            uint8_t data = I2C_Slave_Receive();
-            if (data == 0x42) {
-                // Réaction au Master
-            }
-        }
-    }
-}
-uint8_t I2C_TryMaster() {
-    TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT);
-    _delay_ms(10); // Petit délai pour tester
-    if (TWCR & (1 << TWINT)) {
-        return 1; // On peut être Master
-    } else {
-        return 0; // On est Slave
-    }
+int main()
+{
+	init_master();
+	init_slave();
+    while (1);
 }
