@@ -1,42 +1,57 @@
+#include "prog.h"
 #include <avr/io.h>
-#include <avr/interrupt.h>
-#include <stdint.h>
-#define TMAX 61
+#include <util/delay.h>
 
-volatile uint16_t cycle = 0;
-volatile int8_t step = 1;
-
-void	init_timers(void)
+void adc_init(void)
 {
-	// ** Config Timer0
-	TCCR0A = 0; // Normal Mode
-	TCCR0B |= (1 << CS00) | (1 << CS02); // Prescaler 1024
-	TIMSK0 |= (1 << TOIE0); // overflow interrupt every 1 (Prescaler) * 256 (TOP 0xFF) ticks (62500 in a sec)
-
-
-	// ** Config Timer1
-	TCCR1A |= (1 << COM1A1) | (1 << WGM11); // Fast PWM TOP ICR1
-	TCCR1B |= (1 << WGM10) | (1 << WGM13)| (1 << CS10); // Prescaler 1
-	ICR1 = TMAX;
-	OCR1A = cycle;
-
-	DDRB |= (1 << PB1);
-
-	sei();
+    // Select the reference voltage AVCC and the ADC0 channel (potentiometer)
+    ADMUX = (1 << REFS0) | (1 << ADLAR); // AVCC as reference, 8-bit (ADLAR = left) (see section 23.9.1 p.217)
+	// MUX3..0 = 0 (ADC0) (p.218)
+    
+    // Enable the ADC, prescale by 128 for good accuracy (~125kHz at 16MHz)
+    ADCSRA = (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); // (see section 24.9.2 of the doc)
 }
 
-ISR(TIMER0_OVF_vect)
+// Function to read the ADC (8 bits)
+uint8_t adc_read(void)
 {
-
-	cycle += step;
-	if (cycle == TMAX || cycle == 0)
-		step = -step; // reverse
-
-	OCR1A = cycle;
+    ADCSRA |= (1 << ADSC); // Start the conversion (see section 24.9.2 of the doc)
+    while (ADCSRA & (1 << ADSC)); // Wait for the conversion to finish
+    return ADCH; // Return the 8-bit value
 }
 
-int	main(void)
+// Function to transmit a value in hexadecimal
+void print_hex(uint8_t value)
 {
-	init_timers();
-	while (1);
+    // Convert the value to hexadecimal (2 hex digits)
+    char high = (value >> 4) & 0x0F; // Get the high 4 bits
+    char low = value & 0x0F; // Get the low 4 bits
+
+    // Convert the values to hex characters (0-9, A-F)
+    if (high < 10)
+        uart_tx(high + '0'); // If between 0 and 9, display the digit
+    else
+        uart_tx(high - 10 + 'A'); // If between A and F, display the letter
+
+    if (low < 10)
+        uart_tx(low + '0'); // Same for the low part
+    else
+        uart_tx(low - 10 + 'A');
+
+    uart_tx_string("\r\n"); // New line after the value
 }
+
+int main(void)
+{
+    adc_init(); // Init ADC
+	uart_init(); // Init UART
+    while (1)
+	{
+        uint8_t adc_value = adc_read(); // Read the value from the potentiometer
+        print_hex(adc_value); // Display the value in hexadecimal
+        _delay_ms(20); // Wait 20ms
+    }
+
+    return 0;
+}
+
