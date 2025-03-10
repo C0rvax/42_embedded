@@ -15,7 +15,7 @@ void	init_timers(void)
 
 
 	// Config Timer1
-	TCCR1A |= (1 << COM1A1) | (1 << WGM11); // Fast PWM TOP ICR1
+	TCCR1A |= (1 << COM1A1) | (1 << WGM11); // PWM Phase correct TOP ICR1 clear on compare set on TOP
 	TCCR1B |= (1 << WGM10) | (1 << WGM13)| (1 << CS10); // Prescaler 1
 	ICR1 = TMAX;
 	OCR1A = cycle;
