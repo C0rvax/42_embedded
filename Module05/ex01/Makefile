@@ -6,7 +6,7 @@
 #    By: aduvilla <aduvilla@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/03 11:03:44 by aduvilla          #+#    #+#              #
-#    Updated: 2025/03/10 17:05:55 by aduvilla         ###   ########.fr        #
+#    Updated: 2025/03/10 22:22:51 by aduvilla         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,9 +26,9 @@ PORT		= /dev/ttyUSB0 # board port
 
 BAUD		= 115200 # com speed between microcontroller and computer (115200 with arduino programmer)
 
-FLAGS		= -mmcu=$(MCU) -DF_CPU=$(F_CPU) -Os -Wall -Wextra -pedantic -I. -g # -Os -> optimize for size
+FLAGS		= -mmcu=$(MCU) -DF_CPU=$(F_CPU) -Os -Wall -Wextra -pedantic -Iinclude -g # -Os -> optimize for size
 
-SRCS		= $(addsuffix .c, main prog)
+SRCS		= $(addprefix src/, main.c prog.c adc.c)
 
 TARGET		= main
 
