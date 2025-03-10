@@ -11,12 +11,12 @@ int main(void)
 {
     adc_init(); // Init ADC
 	uart_init(); // Init UART
-	char tmp[3];
+	char tmp[5];
     while (1)
 	{
 		for (uint8_t i = 0; i < 3; ++i)
 		{
-			uint8_to_hex(adc_read(i), tmp);
+			uint16_to_str(adc_read(i), tmp);
 			uart_tx_string(tmp);
 			if (i < 2)
 				uart_tx(',');
