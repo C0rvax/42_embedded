@@ -12,6 +12,7 @@
 
 uint16_t	convert_to_c(uint16_t value)
 {
+//	int32_t temperature = (value - 324) / 1.22;
 	int32_t temperature = (((value - 373 - TS_OFFSET) * 128) / TS_GAIN) + 25;
 	return (uint16_t)temperature;
 }
