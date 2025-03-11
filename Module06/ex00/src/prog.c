@@ -25,3 +25,12 @@ char uart_rx(void)
     while (!(UCSR0A & (1 << RXC0))); // Wait for a character to be received (see section 20.11.3 of the doc)
     return UDR0; // Return the received character
 }
+
+void	uart_print_status(uint8_t status)
+{
+	const char hex_digits[] = "0123456789ABCDEF";
+	uart_tx_string("0x");
+	uart_tx(hex_digits[(status >> 4) & 0x0F]);
+	uart_tx(hex_digits[status & 0x0FF]);
+	uart_tx_string("\r\n");
+}

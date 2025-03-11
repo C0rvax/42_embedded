@@ -19,9 +19,11 @@
 #define F_CPU 16000000UL  // Freq mcu
 #define F_SCL 100000UL    // Freq I2C (100 kHz)
 #define TWBR_VALUE ((F_CPU / F_SCL - 16) / 2)  // (p.180)
+#define AH20_ADDRESS 0x38
 
 void	i2c_init(void);
 void	i2c_start(void);
+void	i2c_write(void);
 void	i2c_stop(void);
 
 #endif /* __I2C_HPP__ */

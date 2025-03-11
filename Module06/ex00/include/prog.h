@@ -12,6 +12,6 @@ void uart_init(void);
 void uart_tx(char c);
 void uart_tx_string(const char *str);
 char uart_rx(void);
-void get_input(char* buffer, uint8_t hide);
+void	uart_print_status(uint8_t status);
 
 #endif /* __PROG_H__ */

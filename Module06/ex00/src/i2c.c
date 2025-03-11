@@ -12,12 +12,16 @@ void	i2c_start(void)
 {
 	TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT);
 	while (!(TWCR & (1 << TWINT)));
-	if ((TWSR & 0xF8) == TW_START)
-		uart_tx_string("i2c Started\r\n");
 }
 
 void	i2c_stop(void)
 {
 	TWSR = (1 << TWSTO) | (1 << TWEN) | (1 << TWINT);
-	uart_tx_string("i2c Stoped\r\n");
+	while (!(TWCR & (1 << TWINT)));
+}
+
+void	i2c_write(void)
+{
+	TWDR = AH20_ADDRESS << 1 | TW_WRITE;
+	while (!(TWCR & (1 << TWINT)));
 }
