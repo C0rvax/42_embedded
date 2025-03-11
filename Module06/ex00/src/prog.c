@@ -31,6 +31,6 @@ void	uart_print_status(uint8_t status)
 	const char hex_digits[] = "0123456789ABCDEF";
 	uart_tx_string("0x");
 	uart_tx(hex_digits[(status >> 4) & 0x0F]);
-	uart_tx(hex_digits[status & 0x0FF]);
+	uart_tx(hex_digits[status & 0x0F]);
 	uart_tx_string("\r\n");
 }
