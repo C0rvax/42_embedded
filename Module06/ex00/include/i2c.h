@@ -1,6 +1,9 @@
 #ifndef I2C_HPP
 # define I2C_HPP
 
+# include <avr/io.h>
+
+
 /*
 * TWI Two Wire service Interface
 * TWBR TW Baud Rate
@@ -23,7 +26,7 @@
 
 void	i2c_init(void);
 void	i2c_start(void);
-void	i2c_write(void);
+void	i2c_write( uint8_t data);
 void	i2c_stop(void);
 
 #endif /* __I2C_HPP__ */
