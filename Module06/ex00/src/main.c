@@ -1,12 +1,6 @@
 #include "prog.h"
 #include "i2c.h"
-#include <util/delay.h>
 #include <util/twi.h>
-
- /*
- * LDR Light Dependent Resistor -> res go down when light go up
- * NTC Negative Temperature Coefficient -> res go down when heat go up
- */
 
 int main(void)
 {
