@@ -31,7 +31,7 @@ int main(void)
 		uart_print_status(i2c_read(0));
 		uart_tx_string("\r\n");
 //		i2c_stop();
-		_delay_ms(2000);
+		_delay_ms(2000); // (p.5)
 	}
 }
 
