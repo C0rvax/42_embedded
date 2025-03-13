@@ -2,20 +2,15 @@
 
 int main(void)
 {
-    // Initialize SPI as master
     SPI_MasterInit();
-
     while (1)
     {
-        // Turn on LED D6 connected to MOSI (PB3)
-        _delay_ms(250);
-		APA102(0, 31, 255, 255, 255);
-        _delay_ms(250);
-		APA102(1, 31, 255, 255, 255);
-        _delay_ms(250);
-		APA102(2, 31, 255, 255, 255);
-        _delay_ms(250);
-		APA102(4, 31, 0, 0, 0);
+		for (uint8_t i = 0; i < 3; ++i)
+		{
+			APA102(i, BRIGHTNESS, 255, 255, 255);
+			_delay_ms(250);
+		}
+		APA102(4, BRIGHTNESS, 0, 0, 0);
         _delay_ms(250);
     }
 }

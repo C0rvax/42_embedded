@@ -1,5 +1,4 @@
 #include "spi.h"
-#include <stdint.h>
 
 void SPI_MasterInit(void)
 {

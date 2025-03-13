@@ -1,8 +1,11 @@
 #include "spi.h"
+#include <stdint.h>
 
 void SPI_MasterInit(void)
 {
+    // Set MOSI, SCK, and SS as output, others as input
     DDRB = (1 << PB3) | (1 << PB5) | (1 << PB2); // Set MOSI and SCK and Slave Select (p.66)
+    // Enable SPI, Master, set clock rate fck/16
     SPCR = (1 << SPE) | (1 << MSTR) | (1 << SPR0); // Enable SPI, Master, set clock rate fck/16
 }
 
@@ -14,7 +17,7 @@ void SPI_MasterTransmit(uint8_t data)
 
 void	APA102_send(uint8_t brightness, uint8_t red, uint8_t green, uint8_t blue)
 {
-	SPI_MasterTransmit(0xE0 | (brightness & 0x1F)); // Max intensity = 31
+	SPI_MasterTransmit(0xE0 | (brightness & 0x1F)); // Max intensity = 0b11100000
 	SPI_MasterTransmit(blue);
 	SPI_MasterTransmit(green);
 	SPI_MasterTransmit(red);
@@ -40,6 +43,11 @@ void	APA102(uint8_t led, uint8_t brightness, uint8_t red, uint8_t green, uint8_t
 			APA102_send(brightness, 0, 0, 0);
 			APA102_send(brightness, 0, 0, 0);
 			APA102_send(brightness, red, green, blue);
+			break;
+		case 4:
+			APA102_send(0, 0, 0, 0);
+			APA102_send(0, 0, 0, 0);
+			APA102_send(0, 0, 0, 0);
 			break;
 		default:
 			break;

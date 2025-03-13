@@ -1,5 +1,4 @@
 #include "spi.h"
-#include <stdint.h>
 
 void SPI_MasterInit(void)
 {
@@ -15,7 +14,7 @@ void SPI_MasterTransmit(uint8_t data)
 
 void	APA102_send(uint8_t brightness, uint8_t red, uint8_t green, uint8_t blue)
 {
-	SPI_MasterTransmit(0xE0 | (brightness & 0x1F)); // Max intensity = 0b11100000
+	SPI_MasterTransmit(0xE0 | (brightness & 0x1F)); // Max intensity = 31
 	SPI_MasterTransmit(blue);
 	SPI_MasterTransmit(green);
 	SPI_MasterTransmit(red);

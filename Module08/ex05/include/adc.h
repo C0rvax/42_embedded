@@ -6,4 +6,4 @@
 void	adc_init(void);
 uint8_t adc_read(uint8_t channel);
 
-#endif /* __ADC_H__ */
+#endif /* ADC_H */
