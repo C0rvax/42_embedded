@@ -31,6 +31,5 @@ void	i2c_write_status(const char* prompt)
 {
 	uart_tx_string(prompt);
 	uart_print_status(TWSR & 0xF8);
-	uart_tx_string("\r\n");
+//	uart_tx_string("\r\n");
 }
-
