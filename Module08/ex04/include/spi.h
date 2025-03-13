@@ -1,8 +1,10 @@
 #ifndef SPI_H
 # define SPI_H
 
-#include <avr/io.h>
-#include <util/delay.h>
+# include <avr/io.h>
+# include <util/delay.h>
+
+# define BRIGHTNESS 2
 
 void	SPI_MasterInit(void);
 void	SPI_MasterTransmit(uint8_t cData);

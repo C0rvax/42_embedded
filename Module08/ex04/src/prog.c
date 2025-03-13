@@ -33,15 +33,12 @@ char uart_rx(void)
 // Print the status as a hexadecimal value over UART
 void uart_print_status(uint8_t status)
 {
-    const char hex_digits[] = "0123456789ABCDEF";
-//    uart_tx_string("0x");
+    const char hex_digits[] = "0123456789abcdef";
     uart_tx(hex_digits[(status >> 4) & 0x0F]);
     uart_tx(hex_digits[status & 0x0F]);
     uart_tx(' ');
-//    uart_tx_string("\r\n");
 }
 
-// Read a command from UART into the provided buffer with display and deletion support
 uint8_t uart_read_command(char *command, uint8_t max_len)
 {
     uint8_t i = 0;

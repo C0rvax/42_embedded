@@ -1,15 +1,5 @@
 #include "spi.h"
-#include "adc.h"
 #include "prog.h" // Include the USART header
-#include <string.h> // Include string.h for strncmp, strlen, and strtol
-#include <stdlib.h> // Include stdlib.h for strtol
-
-void	set_rgb(uint8_t red, uint8_t green, uint8_t blue)
-{
-	// Implement the function to set RGB values
-	// This is a placeholder implementation
-	APA102(0, 31, red, green, blue);
-}
 
 int strcmp(const char *str1, const char *str2)
 {
@@ -21,13 +11,6 @@ int strcmp(const char *str1, const char *str2)
         str2++;
     }
     return (unsigned char)*str1 - (unsigned char)*str2;
-}
-
-void putnbr2(uint8_t n)
-{
-    if (n >= 10)
-        putnbr2(n / 10);
-    uart_tx((n % 10) + '0');
 }
 
 uint8_t ft_strlen(const char* str)
@@ -64,6 +47,16 @@ uint8_t my_strtol16(const char* str)
     return result;
 }
 
+void	set_rgb(uint8_t red, uint8_t green, uint8_t blue)
+{
+	for (uint8_t i = 0; i < 4; i++)
+		SPI_MasterTransmit(0x00); // Initialize sequence (4o to 0)
+	for (uint8_t i = 0; i < 5; ++i)
+		APA102_send(BRIGHTNESS, red, green, blue);
+	for (uint8_t i = 0; i < 4; i++)
+		SPI_MasterTransmit(0xFF);
+}
+
 void	wheel(uint8_t pos)
 {
 	pos = 255 - pos;
@@ -81,83 +74,61 @@ void	wheel(uint8_t pos)
 	}
 }
 
-void	set_led(uint8_t rv1)
-{
-	switch (rv1 / 85)
-	{
-		case 3:
-			APA102(2, 31, 255, 255, 255);
-		case 2:
-			APA102(1, 31, 255, 255, 255);
-		case 1:
-			APA102(0, 31, 255, 255, 255);
-			break;
-		case 0:
-			APA102(4, 31, 255, 255, 255);
-	}
-}
-
-// Process the command received via USART
 void process_command(char *command)
 {
-	// Check if the command is "#FULLRAINBOW"
 	if (strcmp(command, "#FULLRAINBOW") == 0)
 	{
-		// Display a full rainbow effect
-		for (uint8_t i = 0; i < 255; i++)
+		for (uint16_t i = 0; i < 767; i++) // 3 * 256 -1
 		{
-			wheel(i);
+			wheel(i % 255);
 			_delay_ms(10);
 		}
+		APA102(4, 0, 0, 0, 0); // Turn off led
+		uart_tx_string("\r\n");
 	}
-	// Check if the command is a color command
 	else if (command[0] == '#' && ft_strlen(command) == 9)
 	{
+		char rs[3] = {command[1], command[2], '\0'};
+		char gs[3] = {command[3], command[4], '\0'};
+		char bs[3] = {command[5], command[6], '\0'};
 		// Extract RGB values from the command
-		uint8_t r = my_strtol16(command + 1);
-		uint8_t g = my_strtol16(command + 3);
-		uint8_t b = my_strtol16(command + 5);
-		char led = command[7];
-		// Set the color of the specified LED
-		switch (led)
+		uint8_t r = my_strtol16(rs);
+		uint8_t g = my_strtol16(gs);
+		uint8_t b = my_strtol16(bs);
+		char led;
+		if (command[7] != 'D')
+			led = 0;
+		else
+			led = command[8];
+		switch (led) // Set the color of the specified LED
 		{
 			case '6':
-				APA102(0, 31, r, g, b);
+				APA102(0, BRIGHTNESS, r, g, b);
 				break;
 			case '7':
-				APA102(1, 31, r, g, b);
+				APA102(1, BRIGHTNESS, r, g, b);
 				break;
 			case '8':
-				APA102(2, 31, r, g, b);
+				APA102(2, BRIGHTNESS, r, g, b);
 				break;
 			default:
-				uart_tx_string("Error: Invalid LED\n");
+				uart_tx_string("\nError: Invalid LED\r\nUsage: #RRGGBBDX (DX: D6, D7, D8)");
 				break;
 		}
+		uart_tx_string("\r\n");
 	}
 	else
-	{
-		uart_tx_string("Error: Invalid command\n");
-	}
+		uart_tx_string("\nError: Invalid command\r\nUsage: #RRGGBBDX (DX: D6, D7, D8)\r\n");
 }
 
 int main(void)
 {
-    // Initialize SPI as master
     SPI_MasterInit();
-	adc_init();
-	uart_init(); // Initialize USART
-	uint8_t rv1;
-	char command[13]; // Increase size to 13 to accommodate "#FULLRAINBOW" and null terminator
-
+	uart_init();
+	char command[14];
     while (1)
     {
-		rv1 = adc_read(0);
-		set_led(rv1);
-        // Read command from USART
-		if (uart_read_command(command, 13))
-		{
+		if (uart_read_command(command, 14))
 			process_command(command);
-		}
     }
 }

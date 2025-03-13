@@ -45,9 +45,9 @@ void	APA102(uint8_t led, uint8_t brightness, uint8_t red, uint8_t green, uint8_t
 			APA102_send(brightness, red, green, blue);
 			break;
 		case 4:
-			APA102_send(brightness, 0, 0, 0);
-			APA102_send(brightness, 0, 0, 0);
-			APA102_send(brightness, 0, 0, 0);
+			APA102_send(0, 0, 0, 0);
+			APA102_send(0, 0, 0, 0);
+			APA102_send(0, 0, 0, 0);
 			break;
 		default:
 			break;
