@@ -41,17 +41,28 @@ void uart_print_status(uint8_t status)
 //    uart_tx_string("\r\n");
 }
 
-// Read a command from UART into the provided buffer
+// Read a command from UART into the provided buffer with display and deletion support
 uint8_t uart_read_command(char *command, uint8_t max_len)
 {
     uint8_t i = 0;
     char c;
+    uart_tx_string("> ");
     while (i < max_len - 1)
     {
         c = uart_rx();
         if (c == '\n' || c == '\r')
             break;
-        command[i++] = c;
+        if ((c == 127 || c == '\b') && i > 0)
+        {
+            uart_tx_string("\b \b");
+            i--;
+            continue;
+        }
+        if ((33 <= c && c <= 126) || c == 32) // Only process printable characters and spaces
+        {
+            uart_tx(c);
+            command[i++] = c;
+        }
     }
     command[i] = '\0';
     return i;
