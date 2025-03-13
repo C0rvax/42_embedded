@@ -24,7 +24,7 @@ void	i2c_start(void)
 
 void	i2c_stop(void)
 {
-	TWSR = (1 << TWSTO) | (1 << TWEN) | (1 << TWINT);
+	TWCR = (1 << TWSTO) | (1 << TWEN) | (1 << TWINT);
 	while (!(TWCR & (1 << TWINT)));
 }
 
