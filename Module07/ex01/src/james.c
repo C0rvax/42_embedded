@@ -5,9 +5,9 @@ void print_hexdump(uint16_t highlight_addr)
 {
     for (uint16_t i = 0; i < EEPROM_SIZE; i += BYTES_LINE)
 	{
-//        uart_tx_string("\r\n");
+        uart_tx_string("0000");
 		uart_print_hex16(i);
-        uart_tx_string("  ");
+        uart_tx_string(" ");
         for (uint8_t j = 0; j < BYTES_LINE; j++)
 		{
             if (i + j < EEPROM_SIZE)

@@ -115,11 +115,12 @@ int main(void)
             case 1:
                 uart_tx_string("\r\n");
                 eeprom_read_pair(command);
+				uart_tx_string("\r\n");
                 break;
             case 2:
                 uart_tx_string("\r\n");
                 if (is_valid_cmd(command))
-                    eeprom_write_pair(command);
+					eeprom_write_pair(command);
                 break;
             case 3:
                 uart_tx_string("\r\n");
