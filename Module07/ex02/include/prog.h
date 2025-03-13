@@ -2,6 +2,7 @@
 # define PROG_H
 
 # include <avr/io.h>
+# include <avr/interrupt.h>
 
 # define F_CPU 16000000UL
 # define UART_BAUDRATE 115200

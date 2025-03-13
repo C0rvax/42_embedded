@@ -96,6 +96,7 @@ uint8_t is_valid_cmd(unsigned char* cmd)
 
 int main(void)
 {
+	cli();
     uart_init();
     uart_tx_string("EEPROM CLI Ready!\r\n\r\n");
 

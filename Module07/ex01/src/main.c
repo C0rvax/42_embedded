@@ -18,9 +18,9 @@ int main(void)
         uart_tx_string("\r\n\tType a value (hex) : ");
         uint8_t value = uart_rx_hex();
         
-        if (eeprom_read_byte((uint8_t *)addr) != value)
+        if (james_read_byte((uint8_t *)addr) != value)
 		{
-            eeprom_write_byte((uint8_t *)addr, value);
+            james_write_byte((uint8_t *)addr, value);
 			uart_tx_string("\r\n");
 			print_hexdump(addr);
         }

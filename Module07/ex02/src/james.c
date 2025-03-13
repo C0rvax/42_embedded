@@ -1,6 +1,23 @@
 #include "james.h"
 #include "prog.h"
 
+uint8_t james_read_byte(const uint8_t *addr)
+{
+    while (EECR & (1 << EEPE)); // Wait for completion of previous write
+    EEAR = (uint16_t)addr; // Set up address register
+    EECR |= (1 << EERE); // Start eeprom read by writing EERE
+    return EEDR; // Return data from data register
+}
+
+void james_write_byte(uint8_t *addr, uint8_t value)
+{
+    while (EECR & (1 << EEPE)); // Wait for completion of previous write
+    EEAR = (uint16_t)addr; // Set up address register
+    EEDR = value; // Set up data register
+    EECR |= (1 << EEMPE); // Write logical one to EEMPE
+    EECR |= (1 << EEPE); // Start eeprom write by setting EEPE
+}
+
 void print_hexdump(void)
 {
     for (uint16_t i = 0; i < EEPROM_SIZE; i += BYTES_LINE)
@@ -12,7 +29,7 @@ void print_hexdump(void)
 		{
             if (i + j < EEPROM_SIZE)
 			{
-                uint8_t val = eeprom_read_byte((uint8_t *)(i + j));
+                uint8_t val = james_read_byte((uint8_t *)(i + j));
 				uart_print_hex8(val);
 				if (j % 2)
 					uart_tx(' ');
@@ -25,7 +42,7 @@ void print_hexdump(void)
         {
             if (i + j < EEPROM_SIZE)
             {
-                uint8_t val = eeprom_read_byte((uint8_t *)(i + j));
+                uint8_t val = james_read_byte((uint8_t *)(i + j));
                 if (val >= 32 && val <= 126)
                     uart_tx(val);
                 else
@@ -46,13 +63,13 @@ int eeprom_find_key(const unsigned char* key)
     
     while (i < EEPROM_SIZE)
     {
-        if (eeprom_read_byte((void *)i) == KEY)
+        if (james_read_byte((void *)i) == KEY)
         {
             i++;
             uint16_t j = 0;
             // Read the key from EEPROM
-            while (i < EEPROM_SIZE && eeprom_read_byte((void *)i) != VALUE && j < MAX_KEY_SIZE - 1)
-                eeprom_key[j++] = eeprom_read_byte((void *)i++);
+            while (i < EEPROM_SIZE && james_read_byte((void *)i) != VALUE && j < MAX_KEY_SIZE - 1)
+                eeprom_key[j++] = james_read_byte((void *)i++);
             eeprom_key[j] = '\0';
             // Compare the key with the given key
             if (strcmp(eeprom_key, (const char*)key) == 0)
@@ -76,7 +93,7 @@ uint16_t eeprom_find_empty(const unsigned char* cmd)
 
     while (i < EEPROM_SIZE)
     {
-        uint8_t byte = eeprom_read_byte((void *)i);
+        uint8_t byte = james_read_byte((void *)i);
         if (byte != KEY && byte != VALUE && byte != END)
         {
             if (free_space_length == 0)
@@ -130,13 +147,13 @@ void eeprom_write_pair(const unsigned char *cmd)
     }
 
     // Write the key/value pair
-    eeprom_write_byte((void *)addr++, KEY);
+    james_write_byte((void *)addr++, KEY);
     for (i = 0; key[i] != '\0'; i++)
-        eeprom_write_byte((void *)addr++, key[i]);
-    eeprom_write_byte((void *)addr++, VALUE);
+        james_write_byte((void *)addr++, key[i]);
+    james_write_byte((void *)addr++, VALUE);
     for (i = 0; value[i] != '\0'; i++)
-        eeprom_write_byte((void *)addr++, value[i]);
-    eeprom_write_byte((void *)addr, END); // End marker
+        james_write_byte((void *)addr++, value[i]);
+    james_write_byte((void *)addr, END); // End marker
 
     // Display the address where the pair is stored
     uart_tx_string("Stored at: 0x");
@@ -162,11 +179,11 @@ void eeprom_read_pair(const unsigned char *cmd)
     if (addr != 2000)
     {
         // Find the value in EEPROM
-        while (eeprom_read_byte((void *)addr) != VALUE) addr++;
+        while (james_read_byte((void *)addr) != VALUE) addr++;
         addr++;
         // Read and print the value
-        while (eeprom_read_byte((void *)addr) != END && addr < EEPROM_SIZE)
-            uart_tx(eeprom_read_byte((void *)addr++));
+        while (james_read_byte((void *)addr) != END && addr < EEPROM_SIZE)
+            uart_tx(james_read_byte((void *)addr++));
     } 
     else
         uart_tx_string("empty\r\n");
@@ -190,9 +207,9 @@ void eeprom_forget_pair(const unsigned char *cmd)
     if (addr != 2000)
     {
         // Erase the entire pair
-        while (eeprom_read_byte((void *)addr) != END)
-            eeprom_write_byte((void *)addr++, 0x00);
-        eeprom_write_byte((void *)addr, 0x00); // Erase the end marker
+        while (james_read_byte((void *)addr) != END)
+            james_write_byte((void *)addr++, 0x00);
+        james_write_byte((void *)addr, 0x00); // Erase the end marker
         uart_tx_string("deleted\r\n");
     }
     else

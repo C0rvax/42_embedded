@@ -8,4 +8,6 @@
 
 void print_hexdump(void);
 
+uint8_t james_read_byte(const uint8_t *addr);
+
 #endif /* __JAMES_HPP__ */

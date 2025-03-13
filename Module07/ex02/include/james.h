@@ -13,6 +13,8 @@
 #define MAX_CMD_SIZE 8
 
 void print_hexdump(void);
+void james_write_byte(uint8_t *addr, uint8_t value);
+uint8_t james_read_byte(const uint8_t *addr);
 int strcmp(const char *str1, const char *str2);
 void eeprom_forget_pair(const unsigned char *cmd);
 void eeprom_read_pair(const unsigned char *cmd);
