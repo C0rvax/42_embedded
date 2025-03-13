@@ -26,27 +26,29 @@ char uart_rx(void)
     return UDR0; // Return the received character
 }
 
-void	uart_print_status(uint8_t status)
+
+void	uart_print_hex16(uint16_t data)
 {
-	const char hex_digits[] = "0123456789ABCDEF";
-//	uart_tx_string("0x");
-	uart_tx(hex_digits[(status >> 4) & 0x0F]);
-	uart_tx(hex_digits[status & 0x0F]);
-	uart_tx(' ');
-//	uart_tx_string("\r\n");
+	const char hex_digits[] = "0123456789abcdef";
+    uart_tx(hex_digits[(data >> 12) & 0x0F]);
+    uart_tx(hex_digits[(data >> 8) & 0x0F]);
+	uart_tx(hex_digits[(data >> 4) & 0x0F]);
+	uart_tx(hex_digits[data & 0x0F]);
 }
-#include <avr/io.h>
-#include <avr/eeprom.h>
-#include "prog.h"
 
-#define EEPROM_SIZE 1024
+void	uart_print_hex8(uint8_t data)
+{
+	const char hex_digits[] = "0123456789abcdef";
+	uart_tx(hex_digits[(data >> 4) & 0x0F]);
+	uart_tx(hex_digits[data & 0x0F]);
+}
 
-uint8_t hex_char_to_int(char c)
+uint8_t hex_char_to_uint8(char c)
 {
     if (c >= '0' && c <= '9') return c - '0';
     if (c >= 'A' && c <= 'F') return c - 'A' + 10;
     if (c >= 'a' && c <= 'f') return c - 'a' + 10;
-    return 0;
+    return 20;
 }
 
 uint16_t uart_rx_hex(void)
@@ -57,8 +59,16 @@ uint16_t uart_rx_hex(void)
 	{
         c = uart_rx();
         if (c == '\n' || c == '\r') break;
-        value = (value << 4) | hex_char_to_int(c);
+        if (c == 127 || c == '\b')
+		{
+			value = (value >> 4);
+			uart_tx_string("\b \b");
+		}
+		if (hex_char_to_uint8(c) != 20)
+		{
+			value = (value << 4) | hex_char_to_uint8(c);
+			uart_tx(c);
+		}
     }
     return value;
 }
-

@@ -6,7 +6,7 @@
 #    By: aduvilla <aduvilla@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/03 11:03:44 by aduvilla          #+#    #+#              #
-#    Updated: 2025/03/12 18:04:50 by aduvilla         ###   ########.fr        #
+#    Updated: 2025/03/12 20:41:21 by aduvilla         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ BAUD		= 115200 # com speed between microcontroller and computer (115200 with ard
 
 FLAGS		= -mmcu=$(MCU) -DF_CPU=$(F_CPU) -Os -Wall -Wextra -pedantic -Iinclude -g # -Os -> optimize for size
 
-SRCS		= $(addprefix src/, main.c prog.c)
+SRCS		= $(addprefix src/, main.c prog.c james.c)
 
 TARGET		= main
 

@@ -8,10 +8,11 @@
 # define UBRR_VALUE (uint16_t)((F_CPU / (16.0 * UART_BAUDRATE)) - 0.5)
 # define MAX_LEN 16
 
-void uart_init(void);
-void uart_tx(char c);
-void uart_tx_string(const char *str);
-char uart_rx(void);
-void	uart_print_status(uint8_t status);
+void	uart_init(void);
+void	uart_tx(char c);
+void	uart_tx_string(const char *str);
+char	uart_rx(void);
+void	uart_print_hex8(uint8_t status);
+void	uart_print_hex16(uint16_t status);
 
 #endif /* __PROG_H__ */

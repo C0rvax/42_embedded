@@ -12,9 +12,10 @@ void	uart_init(void);
 void	uart_tx(char c);
 void	uart_tx_string(const char *str);
 char	uart_rx(void);
-void	uart_print_status(uint8_t status);
-uint8_t hex_char_to_int(char c);
+void	uart_print_hex8(uint8_t data);
+void	uart_print_hex16(uint16_t data);
+uint8_t hex_char_to_uint8(char c);
 uint16_t uart_rx_hex(void);
-void	uart_rx_string(char *buffer, uint8_t max_length);
+void	uart_rx_string(unsigned char *buffer, uint8_t max_length);
 
 #endif /* __PROG_H__ */

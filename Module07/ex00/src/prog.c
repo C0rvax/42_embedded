@@ -26,12 +26,18 @@ char uart_rx(void)
     return UDR0; // Return the received character
 }
 
-void	uart_print_status(uint8_t status)
+void	uart_print_hex8(uint8_t status)
 {
-	const char hex_digits[] = "0123456789ABCDEF";
-//	uart_tx_string("0x");
+	const char hex_digits[] = "0123456789abcdef";
 	uart_tx(hex_digits[(status >> 4) & 0x0F]);
 	uart_tx(hex_digits[status & 0x0F]);
-	uart_tx(' ');
-//	uart_tx_string("\r\n");
+}
+
+void	uart_print_hex16(uint16_t status)
+{
+	const char hex_digits[] = "0123456789abcdef";
+    uart_tx(hex_digits[(status >> 12) & 0x0F]);
+    uart_tx(hex_digits[(status >> 8) & 0x0F]);
+	uart_tx(hex_digits[(status >> 4) & 0x0F]);
+	uart_tx(hex_digits[status & 0x0F]);
 }
