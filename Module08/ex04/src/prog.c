@@ -40,3 +40,19 @@ void uart_print_status(uint8_t status)
     uart_tx(' ');
 //    uart_tx_string("\r\n");
 }
+
+// Read a command from UART into the provided buffer
+uint8_t uart_read_command(char *command, uint8_t max_len)
+{
+    uint8_t i = 0;
+    char c;
+    while (i < max_len - 1)
+    {
+        c = uart_rx();
+        if (c == '\n' || c == '\r')
+            break;
+        command[i++] = c;
+    }
+    command[i] = '\0';
+    return i;
+}

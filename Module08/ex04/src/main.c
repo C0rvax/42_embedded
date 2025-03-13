@@ -1,6 +1,15 @@
 #include "spi.h"
 #include "adc.h"
 #include "prog.h" // Include the USART header
+#include <string.h> // Include string.h for strncmp, strlen, and strtol
+#include <stdlib.h> // Include stdlib.h for strtol
+
+void	set_rgb(uint8_t red, uint8_t green, uint8_t blue)
+{
+	// Implement the function to set RGB values
+	// This is a placeholder implementation
+	APA102(0, 31, red, green, blue);
+}
 
 void	wheel(uint8_t pos)
 {
@@ -59,23 +68,23 @@ void process_command(char *command)
 		// Set the color of the specified LED
 		switch (led)
 		{
-			case 'D6':
+			case '6':
 				APA102(0, 31, r, g, b);
 				break;
-			case 'D7':
+			case '7':
 				APA102(1, 31, r, g, b);
 				break;
-			case 'D8':
+			case '8':
 				APA102(2, 31, r, g, b);
 				break;
 			default:
-				usart_send_string("Error: Invalid LED\n");
+				uart_tx_string("Error: Invalid LED\n");
 				break;
 		}
 	}
 	else
 	{
-		usart_send_string("Error: Invalid command\n");
+		uart_tx_string("Error: Invalid command\n");
 	}
 }
 
@@ -84,7 +93,7 @@ int main(void)
     // Initialize SPI as master
     SPI_MasterInit();
 	adc_init();
-	usart_init(); // Initialize USART
+	uart_init(); // Initialize USART
 	uint8_t rv1;
 	char command[11];
 
@@ -93,7 +102,7 @@ int main(void)
 		rv1 = adc_read(0);
 		set_led(rv1);
         // Read command from USART
-		if (usart_read_command(command, 11))
+		if (uart_read_command(command, 11))
 		{
 			process_command(command);
 		}
