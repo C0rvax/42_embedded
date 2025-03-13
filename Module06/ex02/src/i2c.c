@@ -1,7 +1,6 @@
 #include "i2c.h"
 #include "prog.h"
 #include <avr/io.h>
-#include <stdint.h>
 #include <util/twi.h>
 
 void	i2c_init(void)
