@@ -52,9 +52,9 @@ int main(void)
             if (!button_pressed)
             {
                 counter--;
-				if (counter == 0)
-					counter = 7;
                 display_counter(counter);
+				if (counter == 0)
+					counter = 8;
                 button_pressed = 1;
             }
         }

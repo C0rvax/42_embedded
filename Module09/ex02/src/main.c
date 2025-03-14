@@ -27,9 +27,6 @@ int main(void)
     init_segments();  // Configuration des segments en sortie
     init_digits(); // Configuration des digits en sortie
 
-    while (1)
-    {
-        display_digit_2(); // Afficher le chiffre "2" sur le digit le plus à droite
-        _delay_ms(1000);  // Attendre 1 seconde
-    }
+	display_digit_2(); // Afficher le chiffre "2" sur le digit le plus à droite
+    while (1);
 }
