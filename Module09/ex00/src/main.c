@@ -2,7 +2,8 @@
 #include <util/delay.h>
 
 // Fonction pour écrire dans un registre du PCA9555
-void pca9555_write(uint8_t reg, uint8_t data) {
+void pca9555_write(uint8_t reg, uint8_t data)
+{
     i2c_start();
     i2c_write(I2C_ADDR << 1);  // Adresse en écriture
     i2c_write(reg);  // Sélection du registre
