@@ -5,7 +5,7 @@
 // Fonction pour initialiser les segments du 7 segments en sortie (P1_0 à P1_7)
 void init_segments(void)
 {
-    pca9555_write(PCA9555_CONFIG_PORT0 + 1, 0x00); // Mettre P1_0 à P1_7 en sortie
+    pca9555_write(PCA9555_CONFIG_PORT1, 0x00); // Mettre P1_0 à P1_7 en sortie
 }
 
 // Fonction pour initialiser les digits en sortie (P0_4 à P0_7)
@@ -18,7 +18,7 @@ void init_digits(void)
 void display_digit_2(void)
 {
     uint8_t segments = (1 << TOFA_PIN) | (1 << TOFB_PIN) | (1 << TOFD_PIN) | (1 << TOFE_PIN) | (1 << TOFG_PIN); // Segments a, b, d, e, g
-    pca9555_write(PCA9555_OUTPUT_PORT0 + 1, segments); // Écrire sur P1_0 à P1_7
+    pca9555_write(PCA9555_OUTPUT_PORT1, segments); // Écrire sur P1_0 à P1_7
     pca9555_write(PCA9555_OUTPUT_PORT0, (uint8_t)~(1 << TOFDP4_PIN)); // Activer le digit le plus à droite (P0_7)
 }
 
