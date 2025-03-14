@@ -34,6 +34,6 @@ void	i2c_write( uint8_t data);
 void	i2c_stop(void);
 uint8_t	i2c_read(uint8_t ack);
 void	i2c_write_status(const char* prompt);
-void    pca9555_init(uint8_t address);
+void	pca9555_write(uint8_t reg, uint8_t data);
 
 #endif /* __I2C_H__ */

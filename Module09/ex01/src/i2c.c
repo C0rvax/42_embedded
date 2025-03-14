@@ -33,3 +33,13 @@ uint8_t	i2c_read(uint8_t ack)
 	while (!(TWCR & (1 << TWINT)));
 	return TWDR;
 }
+
+// Fonction pour écrire dans un registre du PCA9555
+void pca9555_write(uint8_t reg, uint8_t data)
+{
+    i2c_start();
+    i2c_write(I2C_ADDR << 1);  // Adresse en écriture
+    i2c_write(reg);  // Sélection du registre
+    i2c_write(data); // Envoi de la valeur
+    i2c_stop();
+}
