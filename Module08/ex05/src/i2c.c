@@ -1,6 +1,4 @@
 #include "i2c.h"
-#include <avr/io.h>
-#include <util/twi.h>
 
 void	i2c_init(void)
 {
@@ -24,7 +22,7 @@ void	i2c_start(void)
 void i2c_stop(void)
 {
     TWCR = (1 << TWSTO) | (1 << TWEN) | (1 << TWINT);
-//    while (TWCR & (1 << TWSTO)); // Wait for stop condition to be executed
+    while (TWCR & (1 << TWSTO)); // Wait for stop condition to be executed
 }
 
 uint8_t	i2c_read(uint8_t ack)
@@ -40,20 +38,8 @@ uint8_t	i2c_read(uint8_t ack)
 void pca9555_write(uint8_t reg, uint8_t data)
 {
     i2c_start();
-    i2c_write(I2C_ADDR << 1 | TW_WRITE);  // Adresse en écriture
+    i2c_write(I2C_ADDR << 1 | 0);  // Adresse en écriture
     i2c_write(reg);  // Sélection du registre
     i2c_write(data); // Envoi de la valeur
     i2c_stop();
 }
-
-/*
-void pca9555_init(uint8_t address)
-{
-    i2c_start();
-    i2c_write(address << 1); // Write mode
-    i2c_write(0x06); // Configuration register for port 0
-    i2c_write(0xFF); // Set all pins of port 0 as inputs
-    i2c_write(0xFF); // Set all pins of port 1 as inputs
-    i2c_stop();
-}
-*/

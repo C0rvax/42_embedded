@@ -1,7 +1,6 @@
 #include "spi.h"
 #include "adc.h"
 #include "i2c.h"
-//#include "prog.h"
 
 #define SW3_PIN 0 // Pin 100_0 (4) on the PCA9555PW
 
@@ -56,7 +55,6 @@ int main(void)
 {
     SPI_MasterInit();
     adc_init();
-//	uart_init();
     init_buttons();
 
     uint8_t current_led = 0; // 0: D6, 1: D7, 2: D8
