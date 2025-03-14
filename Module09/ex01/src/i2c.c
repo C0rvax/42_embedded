@@ -43,3 +43,17 @@ void pca9555_write(uint8_t reg, uint8_t data)
     i2c_write(data); // Envoi de la valeur
     i2c_stop();
 }
+
+// Fonction pour lire un registre du PCA9555
+uint8_t pca9555_read(uint8_t reg)
+{
+    uint8_t data;
+    i2c_start();
+    i2c_write(I2C_ADDR << 1);  // Adresse en écriture
+    i2c_write(reg);  // Sélection du registre
+    i2c_start();
+    i2c_write((I2C_ADDR << 1) | 1);  // Adresse en lecture
+    data = i2c_read(0); // Lire la valeur
+    i2c_stop();
+    return data;
+}

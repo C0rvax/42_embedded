@@ -1,37 +1,68 @@
 #include "i2c.h"
 #include <util/delay.h>
 
-
-// Fonction pour initialiser la LED D9 en sortie (P0_3)
-void init_led(void)
+// Fonction pour initialiser les LEDs D9, D10, D11 en sortie (P0_3, P0_2, P0_1)
+void init_leds(void)
 {
-   
-    pca9555_write(PCA9555_CONFIG_PORT0, (~(1 << D9_PIN) & 0xFF)); // 0b11110111 Mettre P0_3 en sortie (0 = sortie)
+    pca9555_write(PCA9555_CONFIG_PORT0, (~((1 << D9_PIN) | (1 << D10_PIN) | (1 << D11_PIN)) & 0xFF)); // Mettre P0_3, P0_2, P0_1 en sortie
+    pca9555_write(PCA9555_OUTPUT_PORT0, 0x07); // Éteindre les LEDs D9, D10, D11
 }
 
-// Fonction pour faire clignoter la LED
-void toggle_led(void)
+// Fonction pour initialiser le bouton SW3 en entrée (P0_0)
+void init_button(void)
 {
-    static uint8_t led_state = 0;
+    pca9555_write(PCA9555_CONFIG_PORT0, (1 << SW3_PIN) | (~((1 << D9_PIN) | (1 << D10_PIN) | (1 << D11_PIN)) & 0xFF)); // Mettre P0_0 en entrée
+}
 
-    // Écrire dans le registre de sortie P0 (bit 3)
-    if (led_state)
-        pca9555_write(PCA9555_OUTPUT_PORT0, (1 << D9_PIN));  // 0b00001000 Éteindre LED (actif bas)
-    else
-        pca9555_write(PCA9555_OUTPUT_PORT0, 0x00);  // Allumer LED
+// Fonction pour lire l'état du bouton SW3
+uint8_t read_button(void)
+{
+    return !(pca9555_read(PCA9555_INPUT_PORT0) & (1 << SW3_PIN)); // Bouton actif bas
+}
 
-    led_state = !led_state;
+// Fonction pour afficher la valeur du compteur sur les LEDs
+void display_counter(uint8_t counter)
+{
+    uint8_t led_output = 0;
+	/*
+    if (counter & 0x01) led_output &= ~(1 << D9_PIN);  // Allume D9 si le bit 0 est 1
+    if (counter & 0x02) led_output &= ~(1 << D10_PIN); // Allume D10 si le bit 1 est 1
+    if (counter & 0x04) led_output &= ~(1 << D11_PIN); // Allume D11 si le bit 2 est 1
+	*/
+    if (counter & 0x01) led_output |= (1 << D9_PIN);  // Allume D9 si le bit 0 est 1
+    if (counter & 0x02) led_output |= (1 << D10_PIN); // Allume D10 si le bit 1 est 1
+    if (counter & 0x04) led_output |= (1 << D11_PIN); // Allume D11 si le bit 2 est 1
+    pca9555_write(PCA9555_OUTPUT_PORT0, led_output);
 }
 
 int main(void)
 {
+    uint8_t counter = 7;
+    uint8_t button_pressed = 0;
+
     i2c_init();   // Initialisation I2C
-    init_led();   // Configuration de la LED en sortie
+    init_leds();  // Configuration des LEDs en sortie
+    init_button(); // Configuration du bouton en entrée
+    display_counter(counter); // Éteindre toutes les LEDs au démarrage
 
     while (1)
-	{
-        toggle_led();  // Change l'état de la LED
-        _delay_ms(500);  // Pause de 500ms (1 Hz)
+    {
+        if (read_button())
+        {
+            if (!button_pressed)
+            {
+                counter--;
+				if (counter == 0)
+					counter = 7;
+                display_counter(counter);
+                button_pressed = 1;
+            }
+        }
+        else
+        {
+            button_pressed = 0;
+        }
+        _delay_ms(50);  // Anti-rebond
     }
 }
 
