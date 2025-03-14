@@ -40,7 +40,9 @@
 #define TOFDP3_PIN 6 // datasheet board
 #define TOFDP4_PIN 7 // datasheet board
 #define PCA9555_CONFIG_PORT0  0x06 // see section 6.2.1 of PCA9555 datasheet (p.6)
+#define PCA9555_CONFIG_PORT1  0x07 // see section 6.2.1 of PCA9555 datasheet (p.6)
 #define PCA9555_OUTPUT_PORT0  0x02 // see section 6.2.1 of PCA9555 datasheet (p.6)
+#define PCA9555_OUTPUT_PORT1  0x03 // see section 6.2.1 of PCA9555 datasheet (p.6)
 #define PCA9555_INPUT_PORT0  0x00 // see section 6.2.1 of PCA9555 datasheet (p.6)
 
 void	i2c_init(void);
