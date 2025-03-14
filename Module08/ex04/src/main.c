@@ -1,5 +1,5 @@
 #include "spi.h"
-#include "prog.h" // Include the USART header
+#include "prog.h"
 
 int strcmp(const char *str1, const char *str2)
 {
