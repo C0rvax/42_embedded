@@ -74,7 +74,7 @@ void display_number(uint16_t number)
 {
     uint8_t thousands = number / 1000;
     uint8_t hundreds = (number / 100) % 10;
-    uint8_t tens = number / 10;
+    uint8_t tens = number / 10 % 10;
     uint8_t units = number % 10;
 
     // Display tens on the second digit from the right

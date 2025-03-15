@@ -1,5 +1,6 @@
 #include "i2c.h"
 #include "seven.h"
+#include "adc.h"
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
@@ -23,6 +24,7 @@ int main(void)
     i2c_init();   // Initialisation I2C
     init_segments();  // Configuration des segments en sortie
     init_digits(); // Configuration des digits en sortie
+    adc_init(); // Initialisation de l'ADC
 	sei();
 
 	uint16_t number = 0;
@@ -31,8 +33,9 @@ int main(void)
 		timerOk = 0;
 		init_timer();
 		while (!timerOk)
-			display_number(number);
-//		_delay_ms(1000);
-		number = (number + 1) % 10000;
+		{
+			number = adc_read(0); // Lire la valeur de l'ADC sur le canal 0
+			display_number(number); // Afficher la valeur lue
+		}
 	}
 }
