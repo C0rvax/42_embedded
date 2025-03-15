@@ -1,5 +1,4 @@
 #include "i2c.h"
-#include <stdint.h>
 #include <util/delay.h>
 
 // Fonction pour initialiser les segments du 7 segments en sortie (P1_0 à P1_7)

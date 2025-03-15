@@ -24,11 +24,6 @@ uint8_t read_button(void)
 void display_counter(uint8_t counter)
 {
     uint8_t led_output = 0;
-	/*
-    if (counter & 0x01) led_output &= ~(1 << D9_PIN);  // Allume D9 si le bit 0 est 1
-    if (counter & 0x02) led_output &= ~(1 << D10_PIN); // Allume D10 si le bit 1 est 1
-    if (counter & 0x04) led_output &= ~(1 << D11_PIN); // Allume D11 si le bit 2 est 1
-	*/
     if (counter & 0x01) led_output |= (1 << D9_PIN);  // Allume D9 si le bit 0 est 1
     if (counter & 0x02) led_output |= (1 << D10_PIN); // Allume D10 si le bit 1 est 1
     if (counter & 0x04) led_output |= (1 << D11_PIN); // Allume D11 si le bit 2 est 1
