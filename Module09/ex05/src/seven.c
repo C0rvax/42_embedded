@@ -64,22 +64,32 @@ void display_digit(uint8_t digit, uint8_t pin)
     }
     clear_segments(); // Éteindre tous les segments avant d'afficher le chiffre
     pca9555_write(PCA9555_OUTPUT_PORT0, (uint8_t)~(1 << pin)); // Activer le digit spécifié
-    _delay_ms(5); // Délai pour s'assurer que les segments sont bien éteints
+    _delay_ms(1); // Délai pour s'assurer que les segments sont bien éteints
     pca9555_write(PCA9555_OUTPUT_PORT1, segments); // Écrire sur P1_0 à P1_7
     clear_digits(); // Éteindre tous les digits
     pca9555_write(PCA9555_OUTPUT_PORT0, (uint8_t)~(1 << pin)); // Activer le digit spécifié
 }
 
-void display_number(uint8_t number)
+void display_number(uint16_t number)
 {
+    uint8_t thousands = number / 1000;
+    uint8_t hundreds = (number / 100) % 10;
     uint8_t tens = number / 10;
     uint8_t units = number % 10;
 
     // Display tens on the second digit from the right
+    display_digit(thousands, TOFDP1_PIN);
+    _delay_ms(2); // Small delay to avoid flickering
+
+    // Display units on the rightmost digit
+    display_digit(hundreds, TOFDP2_PIN);
+    _delay_ms(2); // Small delay to avoid flickering
+	
+    // Display tens on the second digit from the right
     display_digit(tens, TOFDP3_PIN);
-    _delay_ms(5); // Small delay to avoid flickering
+    _delay_ms(2); // Small delay to avoid flickering
 
     // Display units on the rightmost digit
     display_digit(units, TOFDP4_PIN);
-    _delay_ms(5); // Small delay to avoid flickering
+    _delay_ms(2); // Small delay to avoid flickering
 }

@@ -21,7 +21,7 @@ void init_segments(void);
 void init_digits(void);
 void clear_digits(void);
 void display_digit(uint8_t digit, uint8_t pin);
-void display_number(uint8_t number);
+void display_number(uint16_t number);
 void clear_segments(void);
 
 #endif /* __SEVEN_H__ */
