@@ -63,6 +63,7 @@ void display_digit(uint8_t digit, uint8_t pin)
 			break;
     }
     clear_segments(); // Éteindre tous les segments avant d'afficher le chiffre
+    pca9555_write(PCA9555_OUTPUT_PORT0, (uint8_t)~(1 << pin)); // Activer le digit spécifié
     _delay_ms(5); // Délai pour s'assurer que les segments sont bien éteints
     pca9555_write(PCA9555_OUTPUT_PORT1, segments); // Écrire sur P1_0 à P1_7
     clear_digits(); // Éteindre tous les digits
