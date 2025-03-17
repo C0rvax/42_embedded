@@ -5,7 +5,7 @@ uint8_t james_read_byte(const uint8_t *addr)
 {
     while (EECR & (1 << EEPE)); // Wait for completion of previous write
     EEAR = (uint16_t)addr; // Set up address register
-    EECR |= (1 << EERE); // Start eeprom read by writing EERE
+    EECR |= (1 << EERE); // Start EEPROM read by writing EERE
     return EEDR; // Return data from data register
 }
 
@@ -15,7 +15,7 @@ void james_write_byte(uint8_t *addr, uint8_t value)
     EEAR = (uint16_t)addr; // Set up address register
     EEDR = value; // Set up data register
     EECR |= (1 << EEMPE); // Write logical one to EEMPE
-    EECR |= (1 << EEPE); // Start eeprom write by setting EEPE
+    EECR |= (1 << EEPE); // Start EEPROM write by setting EEPE
 }
 
 void print_hexdump(void)
@@ -23,14 +23,14 @@ void print_hexdump(void)
     for (uint16_t i = 0; i < EEPROM_SIZE; i += BYTES_LINE)
 	{
 		uart_tx_string("0000");
-		uart_print_hex16(i);
+		uart_tx_hex16(i);
         uart_tx_string(" ");
         for (uint8_t j = 0; j < BYTES_LINE; j++)
 		{
             if (i + j < EEPROM_SIZE)
 			{
                 uint8_t val = james_read_byte((uint8_t *)(i + j));
-				uart_print_hex8(val);
+				uart_tx_hex8(val);
 				if (j % 2)
 					uart_tx(' ');
             }
@@ -55,7 +55,6 @@ void print_hexdump(void)
     }
 }
 
-// Function to find a key in the EEPROM
 int eeprom_find_key(const unsigned char* key)
 {
     uint16_t i = 0;
@@ -80,7 +79,6 @@ int eeprom_find_key(const unsigned char* key)
     return 2000; // Key not found
 }
 
-// Function to find an empty space in the EEPROM
 uint16_t eeprom_find_empty(const unsigned char* cmd)
 {
     uint8_t size = 0;
@@ -109,7 +107,6 @@ uint16_t eeprom_find_empty(const unsigned char* cmd)
     return 2000; // No free space
 }
 
-// Function to write a key/value pair to the EEPROM
 void eeprom_write_pair(const unsigned char *cmd)
 {
     uint16_t addr;
@@ -161,7 +158,6 @@ void eeprom_write_pair(const unsigned char *cmd)
     uart_tx_string("\r\n");
 }
 
-// Function to read a value from a key
 void eeprom_read_pair(const unsigned char *cmd)
 {
     uint16_t addr;
@@ -189,7 +185,6 @@ void eeprom_read_pair(const unsigned char *cmd)
         uart_tx_string("empty\r\n");
 }
 
-// Function to delete a key
 void eeprom_forget_pair(const unsigned char *cmd)
 {
     uint16_t addr;

@@ -3,7 +3,7 @@
 void SPI_MasterInit(void)
 {
     // Set MOSI, SCK, and SS as output, others as input
-    DDRB = (1 << PB3) | (1 << PB5) | (1 << PB2); // Set MOSI and SCK and Slave Select (p.66)
+    DDRB = (1 << PB3) | (1 << PB5) | (1 << PB2); // Set MOSI, SCK, and Slave Select
     // Enable SPI, Master, set clock rate fck/16
     SPCR = (1 << SPE) | (1 << MSTR) | (1 << SPR0); // Enable SPI, Master, set clock rate fck/16
 }
