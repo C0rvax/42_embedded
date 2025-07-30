@@ -33,7 +33,7 @@ Chaque module représente un défi technique, de la simple manipulation de GPIO 
 
 Tous les exercices sont réalisés sur la carte de développement **42Chips Devboard**, basée sur un microcontrôleur **ATmega328P**.
 
-![Schéma Devboard](https://user-images.githubusercontent.com/1310022/272767078-438ac856-11f2-45a7-93e8-586716a1b268.png)
+![Schéma Devboard](https://github.com/C0rvax/embeded/blob/main/elec42_pool.jpg?raw=true)
 
 #### Composants principaux :
 *   **Microcontrôleur** : Atmel ATmega328P (le même que sur un Arduino Uno).
