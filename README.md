@@ -1,43 +1,59 @@
-# Piscine Embarquée 42 - Projets et Exercices
+![42 School](https://img.shields.io/badge/École_42-Piscine_Embarquée-black?style=for-the-badge&logo=42)
 
-Ce dépôt contient l'ensemble de mes solutions pour les exercices de la **Piscine Embarquée** de l'école 42. L'objectif de cette piscine est d'apprendre les bases de la programmation de systèmes embarqués en langage C, en travaillant directement avec les registres d'un microcontrôleur AVR ATmega328P.
+# Piscine Embarquée - Cursus de Programmation sur ATmega328P
+
+Bienvenue dans le dépôt de ma Piscine Embarquée !
+
+Ce repository centralise l'ensemble de mes solutions aux projets de la Piscine Embarquée de 42. L'objectif est d'acquérir des compétences fondamentales en programmation de systèmes embarqués en C, en interagissant directement avec les registres d'un microcontrôleur **AVR ATmega328P** sur une carte de développement custom.
+
+Chaque module représente un défi technique, de la simple manipulation de GPIO à la gestion de protocoles de communication complexes comme I2C et SPI.
+
+## 📚 Table des Matières
+
+1.  [Le Devkit : 42Chips Devboard](#le-devkit--42chips-devboard)
+2.  [Environnement et Outils](#environnement-et-outils)
+3.  [Structure du Dépôt](#structure-du-dépôt)
+4.  [Détail des Modules](#détail-des-modules)
+    - [Module 00 : GPIO](#module-00--premiers-programmes-gpio)
+    - [Module 01 : Timers](#module-01--timers)
+    - [Module 02 : UART](#module-02--protocole-uart)
+    - [Module 03 : RGB & PWM](#module-03--rgb--timers-avancés)
+    - [Module 04 : Interruptions](#module-04--interruptions)
+    - [Module 05 : ADC](#module-05--analogique-adc)
+    - [Module 06 : I2C](#module-06--protocole-i2c)
+    - [Module 07 : EEPROM](#module-07--eeprom)
+    - [Module 08 : SPI](#module-08--protocole-spi)
+    - [Module 09 : Expandeur & 7 Segments](#module-09--expandeur-et-7-segments)
+    - [Rush 00 : Multiplayer](#rush-00--multiplayer)
+5.  [Auteur](#auteur)
 
 ---
 
 ## Le Devkit : 42Chips Devboard
 
-Tous les exercices sont réalisés sur une carte de développement custom, la "42Chips Devboard", basée sur un microcontrôleur **ATmega328P**.
+Tous les exercices sont réalisés sur la carte de développement **42Chips Devboard**, basée sur un microcontrôleur **ATmega328P**.
 
-
+![Schéma Devboard](https://user-images.githubusercontent.com/1310022/272767078-438ac856-11f2-45a7-93e8-586716a1b268.png)
 
 #### Composants principaux :
 *   **Microcontrôleur** : Atmel ATmega328P (le même que sur un Arduino Uno).
 *   **Programmation/Debug** : USB-C via un convertisseur USB-UART CH340G.
-*   **GPIOs** :
-    *   4 LEDs individuelles (D1-D4).
-    *   1 LED RGB (D5).
-    *   2 boutons poussoirs (SW1, SW2).
-*   **Communication I2C** :
-    *   Horloge temps réel (RTC) : PCF8563T.
-    *   Capteur de température et d'humidité : AHT20.
-    *   Expandeur d'I/O 16-bit : PCA9555PW, contrôlant :
-        *   Un afficheur 7 segments à 4 digits.
-        *   3 LEDs (D9-D11).
-        *   1 bouton poussoir (SW3).
-*   **Communication SPI** :
-    *   3 LEDs RGB adressables (APA102).
-*   **Capteurs Analogiques (ADC)** :
-    *   Un potentiomètre (RV1).
-    *   Une photorésistance (LDR).
-    *   Une thermistance (NTC).
+*   **GPIOs** : 4 LEDs, 1 LED RGB, 2 boutons poussoirs.
+*   **Communication I2C** : RTC, capteur Temp/Humidité, Expandeur d'I/O 16-bit (contrôlant un afficheur 7 segments, 3 LEDs, 1 bouton).
+*   **Communication SPI** : 3 LEDs RGB adressables (APA102).
+*   **Capteurs Analogiques (ADC)** : Potentiomètre, LDR, NTC.
 
 ---
 
-## Environnement et Outils Communs
+## Environnement et Outils
+
+![C](https://img.shields.io/badge/Language-C-blue.svg?style=for-the-badge&logo=c)
+![Makefile](https://img.shields.io/badge/Build-Makefile-lightgrey.svg?style=for-the-badge&logo=gnu-make)
+![AVR](https://img.shields.io/badge/Toolchain-AVR--GCC-orange.svg?style=for-the-badge)
 
 *   **Toolchain** : `avr-gcc` pour la compilation croisée.
 *   **Build System** : `make` via des `Makefile`.
-*   **Programmation** : `avrdude` est utilisé pour téléverser les fichiers `.hex` sur la mémoire flash du microcontrôleur.
+*   **Programmation** : `avrdude` est utilisé pour téléverser les fichiers `.hex`.
     *   **Programmateur** : `arduino`
     *   **Baudrate** : `115200`
 
@@ -47,6 +63,72 @@ Tous les exercices sont réalisés sur une carte de développement custom, la "4
 
 Le dépôt est organisé en modules, chacun correspondant à un concept clé de la programmation embarquée.
 
+![42 School](https://img.shields.io/badge/École_42-Piscine_Embarquée-black?style=for-the-badge&logo=42)
+
+# Piscine Embarquée - Cursus de Programmation sur ATmega328P
+
+Bienvenue dans le dépôt de ma Piscine Embarquée !
+
+Ce repository centralise l'ensemble de mes solutions aux projets de la Piscine Embarquée de 42. L'objectif est d'acquérir des compétences fondamentales en programmation de systèmes embarqués en C, en interagissant directement avec les registres d'un microcontrôleur **AVR ATmega328P** sur une carte de développement custom.
+
+Chaque module représente un défi technique, de la simple manipulation de GPIO à la gestion de protocoles de communication complexes comme I2C et SPI.
+
+## 📚 Table des Matières
+
+1.  [Le Devkit : 42Chips Devboard](#le-devkit--42chips-devboard)
+2.  [Environnement et Outils](#environnement-et-outils)
+3.  [Structure du Dépôt](#structure-du-dépôt)
+4.  [Détail des Modules](#détail-des-modules)
+    - [Module 00 : GPIO](#module-00--premiers-programmes-gpio)
+    - [Module 01 : Timers](#module-01--timers)
+    - [Module 02 : UART](#module-02--protocole-uart)
+    - [Module 03 : RGB & PWM](#module-03--rgb--timers-avancés)
+    - [Module 04 : Interruptions](#module-04--interruptions)
+    - [Module 05 : ADC](#module-05--analogique-adc)
+    - [Module 06 : I2C](#module-06--protocole-i2c)
+    - [Module 07 : EEPROM](#module-07--eeprom)
+    - [Module 08 : SPI](#module-08--protocole-spi)
+    - [Module 09 : Expandeur & 7 Segments](#module-09--expandeur-et-7-segments)
+    - [Rush 00 : Multiplayer](#rush-00--multiplayer)
+5.  [Auteur](#auteur)
+
+---
+
+## Le Devkit : 42Chips Devboard
+
+Tous les exercices sont réalisés sur la carte de développement **42Chips Devboard**, basée sur un microcontrôleur **ATmega328P**.
+
+![Schéma Devboard](https://user-images.githubusercontent.com/1310022/272767078-438ac856-11f2-45a7-93e8-586716a1b268.png)
+
+#### Composants principaux :
+*   **Microcontrôleur** : Atmel ATmega328P (le même que sur un Arduino Uno).
+*   **Programmation/Debug** : USB-C via un convertisseur USB-UART CH340G.
+*   **GPIOs** : 4 LEDs, 1 LED RGB, 2 boutons poussoirs.
+*   **Communication I2C** : RTC, capteur Temp/Humidité, Expandeur d'I/O 16-bit (contrôlant un afficheur 7 segments, 3 LEDs, 1 bouton).
+*   **Communication SPI** : 3 LEDs RGB adressables (APA102).
+*   **Capteurs Analogiques (ADC)** : Potentiomètre, LDR, NTC.
+
+---
+
+## Environnement et Outils
+
+![C](https://img.shields.io/badge/Language-C-blue.svg?style=for-the-badge&logo=c)
+![Makefile](https://img.shields.io/badge/Build-Makefile-lightgrey.svg?style=for-the-badge&logo=gnu-make)
+![AVR](https://img.shields.io/badge/Toolchain-AVR--GCC-orange.svg?style=for-the-badge)
+
+*   **Toolchain** : `avr-gcc` pour la compilation croisée.
+*   **Build System** : `make` via des `Makefile`.
+*   **Programmation** : `avrdude` est utilisé pour téléverser les fichiers `.hex`.
+    *   **Programmateur** : `arduino`
+    *   **Baudrate** : `115200`
+
+---
+
+## Structure du Dépôt
+
+Le dépôt est organisé en modules, chacun correspondant à un concept clé de la programmation embarquée.
+
+```text
 .
 ├── module00_gpio/
 ├── module01_timers/
@@ -59,93 +141,63 @@ Le dépôt est organisé en modules, chacun correspondant à un concept clé de 
 ├── module08_spi/
 ├── module09_expander_7seg/
 └── rush00_multiplayer/
-
+```
 
 ---
 
-## Résumé des Modules
+## Détail des Modules
 
 ### Module 00 : Premiers Programmes (GPIO)
-Introduction aux entrées/sorties de base (GPIO).
-- **ex00**: Mise en place du `Makefile` de base pour compiler et flasher.
-- **ex01**: Allumer une LED en configurant un port en sortie (`DDRX`, `PORTX`).
-- **ex02**: Allumer une LED lorsqu'un bouton est pressé en lisant l'état d'un port (`PINX`).
-- **ex03**: Inverser l'état d'une LED à chaque appui (gestion du front montant et de l'anti-rebond).
-- **ex04 (Bonus)**: Créer un compteur binaire sur 4 LEDs avec deux boutons (incrément/décrément) en manipulant les bits des registres.
+*   **Description** : Introduction aux entrées/sorties de base (GPIO).
+*   **Compétences acquises** : Configuration des registres `DDRX` (direction), `PORTX` (sortie) et `PINX` (entrée). Gestion de l'état des broches, lecture de boutons, et manipulation binaire de base.
 
 ### Module 01 : Timers
-Utilisation des timers matériels pour des tâches temporelles sans bloquer le CPU.
-- **ex00**: Faire clignoter une LED à 1Hz avec un délai logiciel (busy-waiting).
-- **ex01**: Faire clignoter une LED à 1Hz en utilisant le **Timer1** en mode CTC.
-- **ex02**: Introduire la **PWM** pour allumer une LED avec un rapport cyclique de 10%.
-- **ex03**: Contrôler le rapport cyclique de la PWM avec des boutons.
+*   **Description** : Utilisation des timers matériels pour des tâches temporelles et la génération de signaux PWM, sans bloquer le CPU.
+*   **Compétences acquises** : Configuration des timers en mode CTC, calcul de prescalers, génération de signaux PWM (Pulse-Width Modulation), contrôle de rapport cyclique.
 
 ### Module 02 : Protocole UART
-Communication série avec un ordinateur.
-- **ex00**: Initialiser l'UART et écrire une fonction pour envoyer un caractère (`uart_tx`).
-- **ex01**: Écrire une fonction pour envoyer une chaîne de caractères (`uart_printstr`).
-- **ex02**: Écrire une fonction pour recevoir un caractère et le renvoyer en écho (`uart_rx`).
-- **ex03**: Utiliser les **interruptions UART** pour un écho qui inverse la casse des caractères.
-- **ex04 (Bonus)**: Implémenter un système de login `username`/`password` via l'UART.
+*   **Description** : Mise en place de la communication série pour échanger des données avec un ordinateur.
+*   **Compétences acquises** : Configuration du protocole UART, envoi et réception de caractères et de chaînes, utilisation des interruptions UART pour une communication non-bloquante.
 
 ### Module 03 : RGB & Timers Avancés
-Contrôle de couleurs complexes avec la PWM.
-- **ex01**: Faire défiler les couleurs Rouge, Vert, Bleu sur la LED RGB D5.
-- **ex02**: Créer une roue de couleurs progressive (arc-en-ciel) en utilisant la PWM sur les 3 canaux de la LED RGB.
-- **ex03**: Contrôler la couleur de la LED RGB en envoyant un code couleur hexadécimal (`#RRGGBB`) via l'UART.
+*   **Description** : Contrôle de couleurs complexes sur une LED RGB en utilisant la PWM.
+*   **Compétences acquises** : Génération de multiples signaux PWM pour contrôler les canaux R, G et B. Création de transitions de couleurs douces et contrôle interactif via l'UART.
 
 ### Module 04 : Interruptions
-Programmation événementielle pour une meilleure réactivité et efficacité.
-- **ex00**: Utiliser une **interruption externe** (liée à un bouton) pour changer l'état d'une LED.
-- **ex01**: Utiliser une **interruption de timer** (Timer0) pour faire varier périodiquement le rapport cyclique de la PWM générée par le Timer1.
-- **ex02 (Bonus)**: Ré-implémenter le compteur binaire en utilisant uniquement des interruptions pour gérer les boutons et l'affichage.
+*   **Description** : Programmation événementielle pour une meilleure réactivité et une meilleure efficacité du CPU.
+*   **Compétences acquises** : Gestion des interruptions externes (liées aux boutons) et des interruptions de timers. Conception de programmes réactifs sans boucle `while(1)` vide.
 
 ### Module 05 : Analogique (ADC)
-Lecture de signaux analogiques avec le convertisseur analogique-numérique.
-- **ex00**: Lire la valeur d'un potentiomètre en 8 bits et l'afficher sur l'UART.
-- **ex01**: Lire les valeurs des 3 capteurs analogiques (potentiomètre, LDR, NTC).
-- **ex02**: Effectuer les mêmes lectures mais avec la résolution maximale de l'ADC (10 bits).
-- **ex03**: Lire la valeur du capteur de température interne du microcontrôleur.
-- **ex04 (Bonus)**: Utiliser la valeur du potentiomètre pour contrôler la roue de couleur de la LED RGB et afficher une jauge sur les 4 LEDs.
+*   **Description** : Lecture de signaux analogiques (tensions variables) à l'aide du convertisseur analogique-numérique.
+*   **Compétences acquises** : Configuration de l'ADC, lecture de capteurs analogiques (potentiomètre, photorésistance), gestion de la résolution (8-bit vs 10-bit).
 
 ### Module 06 : Protocole I2C
-Communication avec des périphériques sur un bus à 2 fils (SDA/SCL).
-- **ex00**: Implémenter les fonctions de base du protocole I2C (`i2c_init`, `i2c_start`, `i2c_stop`).
-- **ex01**: Communiquer avec le capteur AHT20 pour lire les données brutes de température et d'humidité.
-- **ex02**: Interpréter les données brutes pour afficher des valeurs de température (°C) et d'humidité (%) lisibles.
+*   **Description** : Communication avec des périphériques complexes sur un bus à 2 fils (SDA/SCL).
+*   **Compétences acquises** : Implémentation du protocole I2C (maître), communication avec des capteurs externes (AHT20), lecture et interprétation de fiches techniques (datasheets) pour le formatage des données.
 
 ### Module 07 : EEPROM
-Utilisation de la mémoire non-volatile pour stocker des données persistantes.
-- **ex00**: Afficher tout le contenu de l'EEPROM au format hexdump.
-- **ex01**: Écrire un octet à une adresse spécifique de l'EEPROM.
-- **ex02 (Bonus)**: Créer un système de stockage clé-valeur dans l'EEPROM, avec les commandes `WRITE`, `READ`, `FORGET` et `PRINT` via l'UART.
+*   **Description** : Utilisation de la mémoire non-volatile pour stocker des données persistantes qui survivent à un redémarrage.
+*   **Compétences acquises** : Lecture et écriture dans l'EEPROM. Implémentation d'un système de stockage clé-valeur persistant.
 
 ### Module 08 : Protocole SPI
-Communication avec des périphériques sur un bus série synchrone (MOSI/MISO/SCK).
-- **ex00**: Initialiser le SPI en mode maître pour allumer la première LED RGB APA102.
-- **ex01**: Recréer un cycle de couleurs (similaire au Module 03) sur les LEDs SPI.
-- **ex02**: Créer un effet visuel "Cylon" (chenillard) sur les 3 LEDs SPI.
-- **ex03**: Utiliser le potentiomètre pour contrôler une jauge affichée sur les LEDs SPI.
-- **ex04/05 (Bonus)**: Projets plus complexes de contrôle interactif des LEDs SPI.
+*   **Description** : Communication avec des périphériques sur un bus série synchrone rapide.
+*   **Compétences acquises** : Configuration du SPI en mode maître. Contrôle de périphériques en chaîne (daisy-chaining) comme les LEDs adressables APA102.
 
 ### Module 09 : Expandeur et 7 Segments
-Contrôle de nombreux périphériques (LEDs, afficheur) via un expandeur d'I/O sur le bus I2C.
-- **ex00**: Faire clignoter une LED connectée à l'expandeur PCA9555PW.
-- **ex01**: Créer un compteur binaire sur les LEDs de l'expandeur.
-- **ex02**: Allumer un segment spécifique sur l'afficheur 7-segments.
-- **ex03**: Afficher un chiffre et l'incrémenter chaque seconde.
-- **ex04**: Afficher "42" en utilisant la technique du **multiplexage temporel**.
-- **ex05 (Bonus)**: Créer un compteur de 0 à 9999 sur les 4 digits de l'afficheur.
-- **ex06 (Bonus)**: Afficher la valeur du potentiomètre (0-1023) sur l'afficheur.
+*   **Description** : Augmenter le nombre de GPIOs en utilisant un expandeur I2C pour contrôler un afficheur 7-segments.
+*   **Compétences acquises** : Contrôle d'un expandeur d'I/O (PCA9555PW). Implémentation du multiplexage temporel pour afficher plusieurs chiffres sur un seul afficheur.
 
 ### Rush 00 : Multiplayer
-Projet de groupe pour faire communiquer deux microcontrôleurs via le bus I2C.
-- **Objectif**: Créer un jeu de réflexe à deux joueurs.
-- **Configuration**: Deux devkits sont connectés en I2C, l'un en mode maître, l'autre en esclave.
-- **Gameplay**: Un compte à rebours est affiché sur les LEDs. Le premier joueur qui appuie sur son bouton après la fin du décompte gagne. Appuyer trop tôt fait perdre.
+![I2C](https://img.shields.io/badge/Tech-I2C_Multi--Master-blueviolet.svg?style=for-the-badge)
+*   **Description** : Projet de groupe pour faire communiquer deux microcontrôleurs et créer un jeu.
+*   **Objectif** : Créer un jeu de réflexe à deux joueurs où les deux devkits communiquent via le bus I2C.
+*   **Compétences Clés** : Communication I2C entre deux microcontrôleurs (un maître, un esclave), synchronisation, gestion d'un protocole de jeu simple.
 
 ---
 
 ## Auteur
 
-**Arthur Duvillaret / aduvilla**
+*   **Arthur Duvillaret**
+*   **Login 42** : `aduvilla`
+*   **GitHub** : [@C0rvax](https://github.com/C0rvax)
+*   **LinkedIn** : [Arthur Duvillaret](https://www.linkedin.com/in/arthur-duvillaret-427912377/)
