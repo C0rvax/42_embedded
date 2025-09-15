@@ -128,7 +128,4 @@ The repository is organized into modules, where each directory corresponds to a 
 
 ## 👤 Author
 
-*   **Arthur Duvillaret**
-*   **42 Login**: `aduvilla`
-*   **GitHub**: [@C0rvax](https://github.com/C0rvax)
-*   **LinkedIn**: [Arthur Duvillaret](https://www.linkedin.com/in/arthur-duvillaret-427912377/)
+*   **A. Duvillaret** ([C0rvax](https://github.com/C0rvax))
