@@ -119,7 +119,8 @@ The repository is organized into modules, where each directory corresponds to a 
 *   **Skills Acquired**: Controlling a PCA9555PW I/O expander. Implementing time-division multiplexing to display multiple digits on a single display.
 
 ### Rush 00: Multiplayer Game
-![I2C](https://img.shields.io/badge/Tech-I2C_Multi--Master-blueviolet.svg?style=for-the-badge)*   **Description**: A group project to create a game by making two microcontrollers communicate with each other.
+![I2C](https://img.shields.io/badge/Tech-I2C_Multi--Master-blueviolet.svg?style=for-the-badge)
+*   **Description**: A group project to create a game by making two microcontrollers communicate with each other.
 *   **Objective**: Build a two-player reflex game where two devkits communicate over the I2C bus.
 *   **Key Skills**: I2C communication between two microcontrollers (one master, one slave), synchronization, and designing a simple game protocol.
 
