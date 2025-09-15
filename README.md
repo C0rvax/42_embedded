@@ -1,6 +1,16 @@
 # Embedded Systems Cursus - ATmega328P Programming
 
-![42 School](https://img.shields.io/badge/École_42-Embedded_Systems_Pool-black?style=for-the-badge&logo=42)![C](https://img.shields.io/badge/Language-C-blue.svg?style=for-the-badge&logo=c)![AVR](https://img.shields.io/badge/Microcontroller-ATmega328P-orange.svg?style=for-the-badge)![Makefile](https://img.shields.io/badge/Build_System-Makefile-lightgrey.svg?style=for-the-badge&logo=gnu-make)
+![alt text](https://img.shields.io/badge/42_Project-Piscine_Embedded-000000?style=for-the-badge&logo=42&logoColor=white)
+
+![alt text](https://img.shields.io/badge/Language-C-A8B9CC?style=for-the-badge&logo=c&logoColor=white)
+
+![alt text](https://img.shields.io/badge/Toolchain-AVR--GCC-orange?style=for-the-badge)
+
+![alt text](https://img.shields.io/badge/UART-1284C4?style=for-the-badge)
+
+![alt text](https://img.shields.io/badge/SPI-E27233?style=for-the-badge)
+
+![alt text](https://img.shields.io/badge/I2C-8A2BE2?style=for-the-badge)
 
 Welcome to my Embedded Systems Pool repository!
 
